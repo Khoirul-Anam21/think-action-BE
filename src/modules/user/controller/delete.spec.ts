@@ -1,5 +1,5 @@
 import request from "supertest";
-import ExampleFactory from "../model/example.factory.js";
+import ExampleFactory from "../model/user.factory.js";
 import { createApp } from "@src/app.js";
 import { resetDatabase, retrieve, retrieveAll } from "@src/test/utils.js";
 

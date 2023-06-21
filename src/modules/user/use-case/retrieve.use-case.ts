@@ -1,4 +1,4 @@
-import { ExampleStatusTypes } from "../model/example.entity.js";
+import { ExampleStatusTypes } from "../model/user.entity.js";
 import { RetrieveExampleRepository } from "../model/repository/retrieve.repository.js";
 import DatabaseConnection, { RetrieveOptionsInterface } from "@src/database/connection.js";
 

@@ -1,8 +1,8 @@
-import { ExampleEntityInterface } from "../example.entity.js";
+import { UserEntityInterface } from "../user.entity.js";
 import DatabaseConnection, { QueryInterface, RetrieveAllOptionsInterface } from "@src/database/connection.js";
 import DatabaseManager from "@src/database/database-manager.js";
 
-interface DataInterface extends ExampleEntityInterface {
+interface DataInterface extends UserEntityInterface {
   _id: string;
 }
 
@@ -16,11 +16,11 @@ interface ResponseInterface {
   };
 }
 
-export class RetrieveAllExampleRepository {
+export class RetrieveAllUserRepository {
   public databaseManager;
 
   constructor(databaseConnection: DatabaseConnection) {
-    this.databaseManager = new DatabaseManager(databaseConnection, "examples");
+    this.databaseManager = new DatabaseManager(databaseConnection, "Users");
   }
 
   public async handle(query: QueryInterface, options?: RetrieveAllOptionsInterface): Promise<ResponseInterface> {

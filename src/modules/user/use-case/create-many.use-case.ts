@@ -1,5 +1,5 @@
 import { objClean } from "@point-hub/express-utils";
-import { ExampleEntity, ExampleStatusTypes } from "../model/example.entity.js";
+import { ExampleEntity, ExampleStatusTypes } from "../model/user.entity.js";
 import { CreateManyExampleRepository } from "../model/repository/create-many.repository.js";
 import { validate } from "../validation/create-many.validation.js";
 import DatabaseConnection, { CreateManyOptionsInterface, DocumentInterface } from "@src/database/connection.js";

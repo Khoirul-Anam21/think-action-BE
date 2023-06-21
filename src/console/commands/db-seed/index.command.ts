@@ -26,7 +26,7 @@ export default class DbSeedCommand extends BaseCommand {
       // seed examples colllection
       const { exampleSeeds } = await import("@src/modules/example/model/example.seed.js");
       await dbConnection.collection("examples").deleteAll();
-      const exampleData = await dbConnection.collection("examples").createMany(exampleSeeds);
+      const exampleData = await dbConnection.collection("users").createMany(exampleSeeds);
       console.info(`[seed] seeding examples data`, exampleData);
     } catch (error) {
       console.error(error);
