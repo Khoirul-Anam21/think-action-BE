@@ -9,7 +9,7 @@ export class DeleteManyResolutionRepository {
   public databaseManager;
 
   constructor(databaseConnection: DatabaseConnection) {
-    this.databaseManager = new DatabaseManager(databaseConnection, "users");
+    this.databaseManager = new DatabaseManager(databaseConnection, "resolutions");
   }
 
   public async handle(filter: DocumentInterface, options?: DeleteOptionsInterface): Promise<DeleteResultInterface> {

@@ -1,4 +1,3 @@
-import { RetrieveAllUserRepository } from "../model/repository/retrieve-all.repository.js";
 import DatabaseConnection, { QueryInterface, RetrieveAllOptionsInterface } from "@src/database/connection.js";
 
 export class RetrieveAllUserUseCase {
@@ -10,12 +9,11 @@ export class RetrieveAllUserUseCase {
 
   public async handle(query: QueryInterface, options?: RetrieveAllOptionsInterface) {
     try {
-      const response = await new RetrieveAllUserRepository(this.db).handle(query, options);
-
-      return {
-        users: response.data,
-        pagination: response.pagination,
-      };
+      // const response = await new RetrieveAllUserRepository(this.db).handle(query, options);
+      // return {
+      //   users: response.data,
+      //   pagination: response.pagination,
+      // };
     } catch (error) {
       throw error;
     }

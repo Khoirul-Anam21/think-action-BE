@@ -1,9 +1,15 @@
 import { ApiError } from "@point-hub/express-error-handler";
 import { NextFunction, Request, Response } from "express";
 import { db } from "@src/database/database.js";
-import { UserEntityInterface } from "@src/modules/user/model/user.entity";
-import { RetrieveUserUseCase } from "@src/modules/user/use-case/retrieve.use-case";
+import { UserEntityInterface } from "@src/modules/user/model/user.entity.js";
+import { RetrieveUserUseCase } from "@src/modules/user/use-case/retrieve.use-case.js";
 import { verifyToken } from "@src/utils/jwt.js";
+
+export interface AuthUserInterface {
+  _id?: string;
+  username?: string;
+  email?: string;
+}
 
 export const authorizeToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -28,7 +34,7 @@ export const authorizeToken = async (req: Request, res: Response, next: NextFunc
 
     const readAllUserUseCase = new RetrieveUserUseCase(db);
     const user: UserEntityInterface = await readAllUserUseCase.handle(token.sub);
-    const result = {
+    const result: AuthUserInterface = {
       _id: user._id,
       username: user.username,
       email: user.email,

@@ -20,7 +20,7 @@ export class RetrieveAllResolutionRepository {
   public databaseManager;
 
   constructor(databaseConnection: DatabaseConnection) {
-    this.databaseManager = new DatabaseManager(databaseConnection, "users");
+    this.databaseManager = new DatabaseManager(databaseConnection, "resolutions");
   }
 
   public async handle(query: QueryInterface, options?: RetrieveAllOptionsInterface): Promise<ResponseInterface> {

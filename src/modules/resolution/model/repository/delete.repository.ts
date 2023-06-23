@@ -5,7 +5,7 @@ export class DeleteResolutionRepository {
   public databaseManager;
 
   constructor(databaseConnection: DatabaseConnection) {
-    this.databaseManager = new DatabaseManager(databaseConnection, "users");
+    this.databaseManager = new DatabaseManager(databaseConnection, "resolutions");
   }
 
   public async handle(id: string, options?: DeleteOptionsInterface): Promise<DeleteResultInterface> {

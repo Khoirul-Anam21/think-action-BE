@@ -9,7 +9,7 @@ export class AggregateResolutionRepository {
   public databaseManager;
 
   constructor(databaseConnection: DatabaseConnection) {
-    this.databaseManager = new DatabaseManager(databaseConnection, "users");
+    this.databaseManager = new DatabaseManager(databaseConnection, "resolutions");
   }
   public async aggregate(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

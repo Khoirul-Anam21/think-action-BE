@@ -1,62 +1,67 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { faker } from "@faker-js/faker";
-import { isValid } from "date-fns";
+import { ObjectId } from "mongodb";
 import request from "supertest";
-import UserFactory from "../model/resolution.factory.js";
-import { createApp } from "@src/app.js";
-import { resetDatabase, retrieve, retrieveAll } from "@src/test/utils.js";
+import { createApp } from "../../../app.js";
+import UserFactory from "@src/modules/user/model/user.factory.js";
+import { resetDatabase } from "@src/test/utils.js";
+import { signNewToken } from "@src/utils/jwt.js";
+// jest.useFakeTimers();
 
-describe("update an user", () => {
-  beforeEach(async () => {
-    await resetDatabase();
-  });
-  it("should be able to update a user", async () => {
-    const app = await createApp();
+describe("Resolution API - Create Resolution", () => {
+  // let user;
 
-    const resultFactory: any = await new UserFactory().createMany(3);
+  // beforeAll(async () => {
+  //   // const userId = "user123";
+  //   // user = await getUserById(userId);
+  //   await resetDatabase();
+  // });
 
-    const data = await retrieveAll("users");
+  it("should create a new resolution", async () => {
+    // create user example
+    const userFactory = new UserFactory();
+    const resultFactory: any = await userFactory.create();
 
-    const updateData = {
-      displayName: faker.name.fullName(),
+    const tokenSigned = signNewToken(
+      process.env.JWT_ISSUER as string,
+      process.env.JWT_SECRET as string,
+      resultFactory._id
+    );
+    const token = `Bearer ${tokenSigned}`;
+    // Create a mock resolution object
+    const resolution = {
+      // user_id: resultFactory._id, // Use an existing user ID from your database
+      resolution: "My resolution",
+      images: ["image1.jpg", "image2.jpg"],
+      category_id: new ObjectId(),
+      shareType: "public",
+      dueDate: new Date(),
     };
+    console.log(resultFactory);
 
-    const response = await request(app).patch(`/v1/users/${resultFactory.insertedIds[1]}`).send(updateData);
+    // Send a POST request to the create resolution endpoint
+    const app = await createApp();
+    const response = await request(app).post("/v1/resolutions").set("Authorization", token).send(resolution);
     console.log(response.body);
-    // expect http response
-    expect(response.statusCode).toEqual(204);
+    // Verify the response
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty("acknowledged");
+  }, 8000);
 
-    // expect response json
-    expect(response.body).toStrictEqual({});
-
-    // expect recorded data
-    const userRecord = await retrieve("users", resultFactory.insertedIds[1]);
-    expect(userRecord.displayName).toStrictEqual(updateData.displayName);
-    expect(isValid(new Date(userRecord.updatedAt))).toBeTruthy();
-
-    // expect another data unmodified
-    const unmodifiedUserRecord = await retrieve("users", resultFactory.insertedIds[0]);
-    expect(unmodifiedUserRecord.displayName).toStrictEqual(data[0].displayName);
-    expect(unmodifiedUserRecord.updatedAt).toBeUndefined();
-  });
-
-  it("should be return error if invalid id", async () => {
-    const app = await createApp();
-    const updateData = {
-      displayName: faker.name.fullName(),
+  it("should return an error unauthorized if no token provided", async () => {
+    // Create a mock resolution object with invalid user ID
+    const resolution = {
+      resolution: "My resolution",
+      images: ["image1.jpg", "image2.jpg"],
+      category_id: new ObjectId(),
+      shareType: "public",
+      dueDate: new Date(),
     };
-    const response = await request(app).patch(`/v1/users/9993f58ae548d0ca8b5f8999`).send(updateData);
-    expect(response.statusCode).toEqual(404);
-    expect(response.body.status).toBe("Not Found");
-  });
 
-  it("should be return error if no id provided", async () => {
+    // Send a POST request to the create resolution endpoint
     const app = await createApp();
-    const updateData = {
-      displayName: faker.name.fullName(),
-    };
-    const response = await request(app).patch(`/v1/users/`).send(updateData);
-    expect(response.statusCode).toEqual(404);
-    expect(response.body.status).toBe("Not Found");
+    const response = await request(app).post("/v1/resolutions").send(resolution);
+    console.log(response.body);
+    // Verify the response
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("status", "Unauthorized");
   });
 });

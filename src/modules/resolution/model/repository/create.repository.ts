@@ -9,7 +9,7 @@ export class CreateResolutionRepository {
   public databaseManager;
 
   constructor(databaseConnection: DatabaseConnection) {
-    this.databaseManager = new DatabaseManager(databaseConnection, "users");
+    this.databaseManager = new DatabaseManager(databaseConnection, "resolutions");
   }
 
   public async handle(document: DocumentInterface, options?: CreateOptionsInterface): Promise<CreateResultInterface> {

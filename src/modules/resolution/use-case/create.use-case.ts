@@ -1,10 +1,12 @@
 import { objClean } from "@point-hub/express-utils";
-import { CreateUserRepository } from "../model/repository/create.repository.js";
-import { UserEntity } from "../model/resolution.entity.js";
+import { ObjectId } from "mongodb";
+import { CreateResolutionRepository } from "../model/repository/create.repository.js";
+import { ResolutionEntity } from "../model/resolution.entity.js";
 import { validate } from "../validation/create.validation.js";
 import DatabaseConnection, { CreateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
+import { RetrieveUserRepository } from "@src/modules/user/model/repository/retrieve.repository.js";
 
-export class CreateUserUseCase {
+export class CreateResolutionUseCase {
   private db: DatabaseConnection;
 
   constructor(db: DatabaseConnection) {
@@ -16,17 +18,29 @@ export class CreateUserUseCase {
       // validate request body
       validate(document);
 
+      // find user
+      const retrieveUserRepository = new RetrieveUserRepository(this.db);
+      const userFind = await retrieveUserRepository.handle(document.user_id);
+
       // save to database
       const user = objClean(
-        new UserEntity({
-          username: document.name,
-          email: document.firstName,
-          displayName: document.lastName,
+        new ResolutionEntity({
+          user: {
+            _id: userFind._id,
+            displayName: userFind.displayName,
+            photo: userFind.photo,
+          },
+          resolution: document.resolution,
+          images: document.images,
+          category_id: new ObjectId(document.category_id), // untuk sementara
+          shareType: document.shareType,
+          completed: false,
+          dueDate: new Date(document.dueDate),
           createdAt: new Date(),
         })
       );
 
-      const response = await new CreateUserRepository(this.db).handle(user, options);
+      const response = await new CreateResolutionRepository(this.db).handle(user, options);
 
       return {
         acknowledged: response.acknowledged,
