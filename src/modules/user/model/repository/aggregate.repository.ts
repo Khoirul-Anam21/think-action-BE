@@ -9,7 +9,7 @@ export class AggregateUserRepository {
   public databaseManager;
 
   constructor(databaseConnection: DatabaseConnection) {
-    this.databaseManager = new DatabaseManager(databaseConnection, "Users");
+    this.databaseManager = new DatabaseManager(databaseConnection, "users");
   }
   public async aggregate(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

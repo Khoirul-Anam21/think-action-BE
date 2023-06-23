@@ -1,15 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from "express";
-import { OAuth2Client } from "google-auth-library";
-import { db } from "@src/database/database.js";
-import OAuthSingleton from "@src/utils/oauth-client";
+import OAuthSingleton from "@src/utils/oauth-client.js";
 
-export const authController = async (req: Request, res: Response, next: NextFunction) => {
+export const authGoogleController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const oAuth = OAuthSingleton.getInstance();
     const client = oAuth.getClient();
-    const url = client.generateAuthUrl({ scope: "profile email", access_type: "offline" });
-    res.redirect(url);
+    const authUrl = client.generateAuthUrl({
+      access_type: "offline", // To request refresh token
+      scope: "profile email", // Specify the required scopes
+    }); //
+    // Redirect the user to the generated auth URL
+    res.redirect(authUrl);
   } catch (error) {
+    console.log("err" + error);
     next(error);
   }
 };

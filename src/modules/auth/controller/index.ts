@@ -1,2 +1,2 @@
-export { authController } from "./auth-google.controller.js";
-export { authCallbackController } from "./auth-cb.controller.js";
+export { authGoogleController } from "./auth-google.controller.js";
+export { authGoogleCallbackController } from "./auth-google-cb.controller.js";

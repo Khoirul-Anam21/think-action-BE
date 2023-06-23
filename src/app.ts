@@ -12,7 +12,7 @@ export async function createApp() {
   app.use("/assets", ExpressStatic("src/assets"));
 
   // all of your endpoint should be inside router
-  app.use("/", router());
+  app.use("/v1", await router());
 
   middleware.registerAfterRoutes();
 

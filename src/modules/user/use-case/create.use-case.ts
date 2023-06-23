@@ -1,10 +1,10 @@
 import { objClean } from "@point-hub/express-utils";
-import { ExampleEntity, ExampleStatusTypes } from "../model/user.entity.js";
-import { CreateExampleRepository } from "../model/repository/create.repository.js";
+import { CreateUserRepository } from "../model/repository/create.repository.js";
+import { UserEntity } from "../model/user.entity.js";
 import { validate } from "../validation/create.validation.js";
 import DatabaseConnection, { CreateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
 
-export class CreateExampleUseCase {
+export class CreateUserUseCase {
   private db: DatabaseConnection;
 
   constructor(db: DatabaseConnection) {
@@ -17,18 +17,16 @@ export class CreateExampleUseCase {
       validate(document);
 
       // save to database
-      const exampleEntity = objClean(
-        new ExampleEntity({
-          name: document.name,
-          firstName: document.firstName,
-          lastName: document.lastName,
-          optionalUniqueColumn: document.optionalUniqueColumn,
-          status: ExampleStatusTypes.Active,
+      const user = objClean(
+        new UserEntity({
+          username: document.name,
+          email: document.firstName,
+          displayName: document.lastName,
           createdAt: new Date(),
         })
       );
 
-      const response = await new CreateExampleRepository(this.db).handle(exampleEntity, options);
+      const response = await new CreateUserRepository(this.db).handle(user, options);
 
       return {
         acknowledged: response.acknowledged,

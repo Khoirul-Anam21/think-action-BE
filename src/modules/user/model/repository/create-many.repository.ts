@@ -9,7 +9,7 @@ export class CreateManyUserRepository {
   public databaseManager: DatabaseManager;
 
   constructor(databaseConnection: DatabaseConnection) {
-    this.databaseManager = new DatabaseManager(databaseConnection, "Users");
+    this.databaseManager = new DatabaseManager(databaseConnection, "users");
   }
 
   public async handle(

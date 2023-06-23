@@ -5,7 +5,11 @@ export default class OAuthSingleton {
   private clientInstance: OAuth2Client;
 
   private constructor() {
-    this.clientInstance = new OAuth2Client(process.env.AUTH_CLIENT_ID, process.env.AUTH_CLIENT_SECRET);
+    this.clientInstance = new OAuth2Client(
+      process.env.AUTH_CLIENT_ID,
+      process.env.AUTH_CLIENT_SECRET,
+      "http://localhost:4000/v1/auth/google-cb"
+    );
   }
 
   public static getInstance(): OAuthSingleton {

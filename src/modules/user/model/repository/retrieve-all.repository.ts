@@ -20,7 +20,7 @@ export class RetrieveAllUserRepository {
   public databaseManager;
 
   constructor(databaseConnection: DatabaseConnection) {
-    this.databaseManager = new DatabaseManager(databaseConnection, "Users");
+    this.databaseManager = new DatabaseManager(databaseConnection, "users");
   }
 
   public async handle(query: QueryInterface, options?: RetrieveAllOptionsInterface): Promise<ResponseInterface> {

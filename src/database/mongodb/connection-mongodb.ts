@@ -163,12 +163,12 @@ export default class MongoDbConnection implements IDatabaseAdapter {
     }
 
     try {
-      const insertOneOptions = options as InsertOneOptions;
-      insertOneOptions.writeConcern = {
-        w: "majority",
-      };
+      // const insertOneOptions = options as InsertOneOptions;
+      // insertOneOptions.writeConcern = {
+      //   w: "majority",
+      // };
 
-      const response = await this._collection.insertOne(replaceStringToObjectId(document), insertOneOptions);
+      const response = await this._collection.insertOne(replaceStringToObjectId(document));
 
       return {
         acknowledged: response.acknowledged,

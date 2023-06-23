@@ -1,10 +1,10 @@
 import { objClean } from "@point-hub/express-utils";
-import { ExampleEntity, ExampleStatusTypes } from "../model/user.entity.js";
-import { CreateManyExampleRepository } from "../model/repository/create-many.repository.js";
+import { CreateManyUserRepository } from "../model/repository/create-many.repository.js";
+import { UserEntity } from "../model/user.entity.js";
 import { validate } from "../validation/create-many.validation.js";
 import DatabaseConnection, { CreateManyOptionsInterface, DocumentInterface } from "@src/database/connection.js";
 
-export class CreateManyExampleUseCase {
+export class CreateManyUserUseCase {
   private db: DatabaseConnection;
 
   constructor(db: DatabaseConnection) {
@@ -21,11 +21,10 @@ export class CreateManyExampleUseCase {
       for (const document of documents) {
         entities.push(
           objClean(
-            new ExampleEntity({
-              name: document.name,
-              firstName: document.firstName,
-              lastName: document.lastName,
-              status: ExampleStatusTypes.Active,
+            new UserEntity({
+              username: document.name,
+              email: document.firstName,
+              displayName: document.lastName,
               createdAt: new Date(),
             })
           )
@@ -33,7 +32,7 @@ export class CreateManyExampleUseCase {
       }
 
       // save to database
-      const response = await new CreateManyExampleRepository(this.db).handle(entities, options);
+      const response = await new CreateManyUserRepository(this.db).handle(entities, options);
 
       return {
         acknowledged: response.acknowledged,

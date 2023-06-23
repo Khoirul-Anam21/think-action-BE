@@ -1,6 +1,6 @@
 import { objClean } from "@point-hub/express-utils";
-import { ExampleEntity, ExampleStatusTypes } from "../model/user.entity.js";
-import { UpdateManyExampleRepository } from "../model/repository/update-many.repository.js";
+import { UpdateManyUserRepository } from "../model/repository/update-many.repository.js";
+import { UserEntity } from "../model/user.entity.js";
 import { validate } from "../validation/update-many.validation.js";
 import DatabaseConnection, { UpdateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
 
@@ -13,7 +13,7 @@ interface UpdateManyResponseInterface {
   modifiedCount: number;
 }
 
-export class UpdateManyExampleUseCase {
+export class UpdateManyUserUseCase {
   private db: DatabaseConnection;
 
   constructor(db: DatabaseConnection) {
@@ -28,12 +28,11 @@ export class UpdateManyExampleUseCase {
       // validate request body
       validate(document);
 
-      const exampleEntity = new ExampleEntity({
-        status: ExampleStatusTypes.Suspended,
+      const user = new UserEntity({
         updatedAt: new Date(),
       });
 
-      const updateResponse = await new UpdateManyExampleRepository(this.db).handle(
+      const updateResponse = await new UpdateManyUserRepository(this.db).handle(
         {
           name: {
             $regex: `${document.filter.name}`,
@@ -41,7 +40,7 @@ export class UpdateManyExampleUseCase {
           },
         },
         {
-          $set: objClean(exampleEntity),
+          $set: objClean(user),
         },
         options
       );

@@ -9,7 +9,7 @@ export class DeleteManyUserRepository {
   public databaseManager;
 
   constructor(databaseConnection: DatabaseConnection) {
-    this.databaseManager = new DatabaseManager(databaseConnection, "Users");
+    this.databaseManager = new DatabaseManager(databaseConnection, "users");
   }
 
   public async handle(filter: DocumentInterface, options?: DeleteOptionsInterface): Promise<DeleteResultInterface> {

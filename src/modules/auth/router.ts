@@ -3,7 +3,7 @@ import * as controller from "./controller/index.js";
 
 const authRouter = Router();
 
-authRouter.get("/google", controller.authController);
-authRouter.get("/google-callback", controller.authCallbackController);
+authRouter.get("/google", controller.authGoogleController);
+authRouter.get("/google-cb", controller.authGoogleCallbackController);
 
 export default authRouter;
