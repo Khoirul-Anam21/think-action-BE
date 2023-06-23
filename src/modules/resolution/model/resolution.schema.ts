@@ -8,7 +8,7 @@
 import { IDatabaseAdapter } from "@src/database/connection.js";
 import { MongoDBHelper } from "@src/database/mongodb/mongodb-helper.js";
 
-export const collection = "Users";
+export const collection = "resolutions";
 
 export async function createCollection(db: IDatabaseAdapter) {
   try {
@@ -24,35 +24,35 @@ export async function createCollection(db: IDatabaseAdapter) {
       bsonType: "object",
       required: ["name", "firstName", "lastName"],
       properties: {
-        username: {
-          bsonType: "string",
-          description: "The name for the User from google",
+        user: {
+          user: "object",
+          description: "User own the resolution",
         },
-        email: {
+        resolution: {
           bsonType: "string",
-          description: "The email for the User",
+          description: "The content of the resolution",
         },
-        displayName: {
+        images: {
+          bsonType: "array",
+          description: "The resolution images",
+        },
+        category_id: {
+          bsonType: "object",
+          description: "The object id refer to category",
+        },
+        shareType: {
           bsonType: "string",
-          description: "The name for display",
+          description: "The visibility of resolution",
+        },
+        completed: {
+          bsonType: "boolean",
+          description: "Complete indication",
+        },
+        dueDate: {
+          bsonType: "date",
+          description: "Deadline of the resolution",
         },
       },
-    });
-
-    console.info(`[schema] ${collection} - create unique attribute "name"`);
-    await helper.createUnique(collection, {
-      name: -1,
-    });
-
-    console.info(`[schema] ${collection} - create unique attribute for multiple column "firstName" and "lastName"`);
-    await helper.createUnique(collection, {
-      firstName: -1,
-      lastName: -1,
-    });
-
-    console.info(`[schema] ${collection} - create unique attribute "optionalUniqueColumn" if the field is exists`);
-    await helper.createUniqueIfNotNull(collection, {
-      optionalUniqueColumn: -1,
     });
   } catch (error) {
     throw error;

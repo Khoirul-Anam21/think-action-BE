@@ -8,6 +8,12 @@ export interface UserEntityInterface {
   updatedAt?: Date;
 }
 
+export interface UserDisplayInterface {
+  _id?: string;
+  displayName?: string;
+  photo?: string;
+}
+
 export class UserEntity implements UserEntityInterface {
   public _id?: string;
   public username?: string;

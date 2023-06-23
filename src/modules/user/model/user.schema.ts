@@ -8,7 +8,7 @@
 import { IDatabaseAdapter } from "@src/database/connection.js";
 import { MongoDBHelper } from "@src/database/mongodb/mongodb-helper.js";
 
-export const collection = "Users";
+export const collection = "users";
 
 export async function createCollection(db: IDatabaseAdapter) {
   try {

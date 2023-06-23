@@ -1,27 +1,35 @@
 import { faker } from "@faker-js/faker";
 import Factory from "@point-hub/express-factory";
-import { CreateManyUserRepository } from "./repository/create-many.repository.js";
-import { CreateUserRepository } from "./repository/create.repository.js";
-import { UserEntityInterface } from "./resolution.entity.js";
+import { ObjectId } from "mongodb";
+import { CreateManyResolutionRepository } from "./repository/create-many.repository.js";
+import { CreateResolutionRepository } from "./repository/create.repository.js";
+import { ResolutionEntityInterface } from "./resolution.entity.js";
 import { db } from "@src/database/database.js";
 
-export default class UserFactory extends Factory<UserEntityInterface> {
+export default class ResolutionFactory extends Factory<ResolutionEntityInterface> {
   async createMany(count: number) {
-    const exampleRepository = new CreateManyUserRepository(db);
+    const exampleRepository = new CreateManyResolutionRepository(db);
     return await exampleRepository.handle(this.makeMany(count));
   }
   definition() {
     return {
-      username: faker.name.fullName(),
-      email: `${faker.name.firstName()}.${faker.name.lastName()}@gmail.com`,
-      displayName: faker.name.lastName(),
-      photo: "randomhoto.jpg",
+      user: {
+        displayName: faker.name.fullName(),
+        photo: "randomhoto.jpg",
+      },
+      resolution: faker.lorem.sentence(),
+      images: ["image.jpg", "otherimage.jpg"],
+      category_id: new ObjectId(),
+      shareType: "everyone",
+      completed: false,
+      dueDate: new Date(),
       createdAt: new Date(),
+      updatedAt: new Date(),
     };
   }
 
   async create() {
-    const UserRepository = new CreateUserRepository(db);
-    return await UserRepository.handle(this.makeOne());
+    const ResolutionRepository = new CreateResolutionRepository(db);
+    return await ResolutionRepository.handle(this.makeOne());
   }
 }
