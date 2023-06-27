@@ -6,6 +6,8 @@ const resolutionRouter = Router();
 
 // router.get("/", controller.retrieveAllController);
 resolutionRouter.post("/", authorizeToken, controller.createController);
+resolutionRouter.get("/", controller.readManyController);
+resolutionRouter.get("/user", authorizeToken, controller.readManyController);
 // router.get("/:id", controller.retrieveController);
 // resolutionRouter.patch("/:id", controller.updateController);
 // resolutionRouter.delete("/:id", controller.deleteController);

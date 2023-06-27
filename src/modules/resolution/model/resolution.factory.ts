@@ -14,6 +14,7 @@ export default class ResolutionFactory extends Factory<ResolutionEntityInterface
   definition() {
     return {
       user: {
+        id: new ObjectId(),
         displayName: faker.name.fullName(),
         photo: "randomhoto.jpg",
       },

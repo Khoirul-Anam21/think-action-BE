@@ -17,30 +17,28 @@ export class CreateResolutionUseCase {
     try {
       // validate request body
       validate(document);
-
       // find user
       const retrieveUserRepository = new RetrieveUserRepository(this.db);
       const userFind = await retrieveUserRepository.handle(document.user_id);
-
+      console.log(document.resolution);
       // save to database
-      const user = objClean(
-        new ResolutionEntity({
-          user: {
-            _id: userFind._id,
-            displayName: userFind.displayName,
-            photo: userFind.photo,
-          },
-          resolution: document.resolution,
-          images: document.images,
-          category_id: new ObjectId(document.category_id), // untuk sementara
-          shareType: document.shareType,
-          completed: false,
-          dueDate: new Date(document.dueDate),
-          createdAt: new Date(),
-        })
-      );
+      const resolutionEntity = new ResolutionEntity({
+        user: {
+          _id: userFind._id,
+          displayName: userFind.displayName,
+          photo: userFind.photo,
+        },
+        resolution: document.resolution,
+        images: document.images,
+        category_id: new ObjectId(document.category_id), // untuk sementara
+        shareType: document.shareType,
+        completed: false,
+        dueDate: new Date(document.dueDate),
+        createdAt: new Date(),
+      });
 
-      const response = await new CreateResolutionRepository(this.db).handle(user, options);
+      const response = await new CreateResolutionRepository(this.db).handle(resolutionEntity, options);
+      console.log(resolutionEntity);
 
       return {
         acknowledged: response.acknowledged,

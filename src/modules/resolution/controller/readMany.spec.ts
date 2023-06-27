@@ -1,62 +1,116 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { faker } from "@faker-js/faker";
-import { isValid } from "date-fns";
+import { ObjectId } from "mongodb";
 import request from "supertest";
-import UserFactory from "../model/resolution.factory.js";
-import { createApp } from "@src/app.js";
-import { resetDatabase, retrieve, retrieveAll } from "@src/test/utils.js";
+import { createApp } from "../../../app.js"; // Assuming you have your Express app defined in a separate file
+import ResolutionFactory from "../model/resolution.factory.js";
+import UserFactory from "@src/modules/user/model/user.factory.js";
+import { resetDatabase } from "@src/test/utils.js";
+import { signNewToken } from "@src/utils/jwt.js";
 
-describe("update an user", () => {
-  beforeEach(async () => {
+describe("Get resolutions APIs", () => {
+  beforeAll(async () => {
     await resetDatabase();
-  });
-  it("should be able to update a user", async () => {
-    const app = await createApp();
+    const resolutionFactory = new ResolutionFactory();
+    await resolutionFactory.createMany(4);
+  }, 60000);
+  // Test case for reading all resolutions
+  describe("Get all resolutions", () => {
+    it("should return all resolutions", async () => {
+      const userFactory = new UserFactory();
+      const resultFactory: any = await userFactory.create();
 
-    const resultFactory: any = await new UserFactory().createMany(3);
+      const tokenSigned = signNewToken(
+        process.env.JWT_ISSUER as string,
+        process.env.JWT_SECRET as string,
+        resultFactory._id
+      );
+      console.log(resultFactory._id);
+      const token = `Bearer ${tokenSigned}`;
+      // Create a mock resolution object
+      const resolution = {
+        // user_id: resultFactory._id, // Use an existing user ID from your database
+        resolution: "My resolution",
+        images: ["image1.jpg", "image2.jpg"],
+        category_id: "649543776dbcf7daf089bba8",
+        shareType: "public",
+        dueDate: new Date(),
+      };
 
-    const data = await retrieveAll("users");
-
-    const updateData = {
-      displayName: faker.name.fullName(),
-    };
-
-    const response = await request(app).patch(`/v1/users/${resultFactory.insertedIds[1]}`).send(updateData);
-    console.log(response.body);
-    // expect http response
-    expect(response.statusCode).toEqual(204);
-
-    // expect response json
-    expect(response.body).toStrictEqual({});
-
-    // expect recorded data
-    const userRecord = await retrieve("users", resultFactory.insertedIds[1]);
-    expect(userRecord.displayName).toStrictEqual(updateData.displayName);
-    expect(isValid(new Date(userRecord.updatedAt))).toBeTruthy();
-
-    // expect another data unmodified
-    const unmodifiedUserRecord = await retrieve("users", resultFactory.insertedIds[0]);
-    expect(unmodifiedUserRecord.displayName).toStrictEqual(data[0].displayName);
-    expect(unmodifiedUserRecord.updatedAt).toBeUndefined();
-  });
-
-  it("should be return error if invalid id", async () => {
-    const app = await createApp();
-    const updateData = {
-      displayName: faker.name.fullName(),
-    };
-    const response = await request(app).patch(`/v1/users/9993f58ae548d0ca8b5f8999`).send(updateData);
-    expect(response.statusCode).toEqual(404);
-    expect(response.body.status).toBe("Not Found");
+      // Send a POST request to the create resolution endpoint
+      const app = await createApp();
+      await request(app).post("/v1/resolutions").set("Authorization", token).send(resolution);
+      const response = await request(app).get("/v1/resolutions");
+      expect(response.status).toBe(200);
+      expect(response.body).toBeDefined();
+      expect(Array.isArray(response.body.data)).toBe(true);
+    });
   });
 
-  it("should be return error if no id provided", async () => {
-    const app = await createApp();
-    const updateData = {
-      displayName: faker.name.fullName(),
-    };
-    const response = await request(app).patch(`/v1/users/`).send(updateData);
-    expect(response.statusCode).toEqual(404);
-    expect(response.body.status).toBe("Not Found");
+  // Test case for reading resolutions belonging to a user
+  describe("Get all resolution owned by user", () => {
+    // it("should return resolutions belonging to a user", async () => {
+    //   // create user example
+    //   const userFactory = new UserFactory();
+    //   const resultFactory: any = await userFactory.create();
+
+    //   const tokenSigned = signNewToken(
+    //     process.env.JWT_ISSUER as string,
+    //     process.env.JWT_SECRET as string,
+    //     resultFactory._id
+    //   );
+    //   const token = `Bearer ${tokenSigned}`;
+    //   // Create a mock resolution object
+    //   const resolution = {
+    //     // user_id: resultFactory._id, // Use an existing user ID from your database
+    //     resolution: "My resolution SSSSSS",
+    //     images: ["image1.jpg", "image2.jpg"],
+    //     category_id: "64999658b80b2d5e1c2ba81f",
+    //     shareType: "public",
+    //     dueDate: new Date(),
+    //   };
+    //   console.log("id : ");
+    //   console.log(typeof resultFactory._id);
+
+    //   // Send a POST request to the create resolution endpoint
+    //   const app = await createApp();
+    //   const tes = await request(app).post("/v1/resolutions").set("Authorization", token).send(resolution);
+    //   console.log("hasil create ");
+    //   console.log(tes.body);
+    //   const response = await request(app).get("v1/resolutions/user").set("Authorization", token);
+    //   console.log("All owned:");
+    //   console.log(response.body);
+    //   expect(response.status).toBe(200);
+    //   expect(response.body).toBeDefined();
+    //   expect(Array.isArray(response.body.data)).toBe(true);
+    // });
+
+    it("should return 404 if user not exist", async () => {
+      const app = await createApp();
+      const response = await request(app).get(`/v1/resolutions/user`);
+
+      expect(response.status).toBe(401);
+    });
+
+    // it("should return an empty array if user has no resolutions", async () => {
+    //   // create user example
+    //   const userFactory = new UserFactory();
+    //   const resultFactory: any = await userFactory.create();
+
+    //   const tokenSigned = signNewToken(
+    //     process.env.JWT_ISSUER as string,
+    //     process.env.JWT_SECRET as string,
+    //     resultFactory._id
+    //   );
+    //   const token = `Bearer ${tokenSigned}`;
+    //   // Create a mock resolution object
+
+    //   // Send a POST request to the create resolution endpoint
+    //   const app = await createApp();
+
+    //   const response = await request(app).get("v1/resolutions/user").set("Authorization", token);
+    //   expect(response.status).toBe(200);
+    //   expect(response.body).toBeDefined();
+    //   expect(Array.isArray(response.body.data)).toBe(true);
+    //   expect(Array.isArray(response.body.data.length)).toBe(0);
+    // });
   });
 });

@@ -29,6 +29,7 @@ export class ResolutionEntity implements ResolutionEntityInterface {
   constructor(resolution: ResolutionEntityInterface) {
     this._id = resolution._id;
     this.user = resolution.user;
+    this.resolution = resolution.resolution;
     this.images = resolution.images;
     this.category_id = resolution.category_id;
     this.shareType = resolution.shareType;

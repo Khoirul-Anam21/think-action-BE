@@ -1,19 +1,20 @@
 import { NextFunction, Request, Response } from "express";
-import { UpdateUserUseCase } from "../use-case/update.use-case.js";
+import { RetrieveAllResolutionUseCase } from "../use-case/retrieve-all.use-case.js";
 import { db } from "@src/database/database.js";
+import { AuthUserInterface } from "@src/middleware/auth-middleware.js";
 
-export const updateController = async (req: Request, res: Response, next: NextFunction) => {
+export const readManyController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const session = db.startSession();
-
+    const userCredential: AuthUserInterface = req.res?.locals.credential;
     db.startTransaction();
-
-    const updateUserUseCase = new UpdateUserUseCase(db);
-    await updateUserUseCase.handle(req.params.id, req.body, { session });
+    const auth = userCredential ?? "";
+    const retrieveAllResolutionUseCase = new RetrieveAllResolutionUseCase(db);
+    const result = await retrieveAllResolutionUseCase.handle(auth._id, { session });
 
     await db.commitTransaction();
 
-    res.status(204).json();
+    res.status(200).json(result);
   } catch (error) {
     await db.abortTransaction();
     next(error);
