@@ -35,7 +35,7 @@ export class AuthUseCase {
           new UserEntity({
             username: document.name,
             email: document.email,
-            displayName: document.name,
+            accountName: document.name,
             photo: document.picture,
             createdAt: new Date(),
           })

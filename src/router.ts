@@ -1,6 +1,7 @@
 import express, { Express } from "express";
 import authRouter from "./modules/auth/router.js";
 import resolutionRouter from "./modules/resolution/router.js";
+import userSupportRouter from "./modules/support/router.js";
 import userRouter from "./modules/user/router.js";
 
 export default async function () {
@@ -14,6 +15,6 @@ export default async function () {
   app.use("/auth", authRouter);
   app.use("/users", userRouter);
   app.use("/resolutions", resolutionRouter);
-
+  app.use("/supports", userSupportRouter);
   return app;
 }

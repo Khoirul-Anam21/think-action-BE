@@ -25,7 +25,7 @@ export class CreateResolutionUseCase {
       const resolutionEntity = new ResolutionEntity({
         user: {
           _id: userFind._id,
-          displayName: userFind.displayName,
+          accountName: userFind.accountName,
           photo: userFind.photo,
         },
         resolution: document.resolution,

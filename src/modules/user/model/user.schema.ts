@@ -32,9 +32,9 @@ export async function createCollection(db: IDatabaseAdapter) {
           bsonType: "string",
           description: "The email for the User",
         },
-        displayName: {
+        accountName: {
           bsonType: "string",
-          description: "The name for display",
+          description: "The name for account",
         },
       },
     });

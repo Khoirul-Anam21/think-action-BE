@@ -5,7 +5,7 @@ interface ResponseInterface {
   _id: string;
   username?: string;
   email?: string;
-  displayName?: string;
+  accountName?: string;
   createdAt?: Date;
 }
 
@@ -22,7 +22,7 @@ export class RetrieveUserUseCase {
 
       return {
         _id: response._id,
-        displayName: response.displayName,
+        accountName: response.accountName,
         username: response.username,
         email: response.email,
         createdAt: response.createdAt,

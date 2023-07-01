@@ -24,7 +24,7 @@ export class UpdateUserUseCase {
       await readUserRepository.handle(id);
       // update database
       const user = new UserEntity({
-        displayName: document.displayName,
+        accountName: document.accountName,
         updatedAt: new Date(),
       });
       console.log(user);

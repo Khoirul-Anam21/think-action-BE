@@ -21,7 +21,7 @@ export class CreateUserUseCase {
         new UserEntity({
           username: document.name,
           email: document.firstName,
-          displayName: document.lastName,
+          accountName: document.lastName,
           createdAt: new Date(),
         })
       );

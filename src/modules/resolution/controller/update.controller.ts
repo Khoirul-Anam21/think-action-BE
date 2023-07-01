@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { UpdateUserUseCase } from "../use-case/update.use-case.js";
+import { UpdateResolutionUseCase } from "../use-case/update.use-case.js";
 import { db } from "@src/database/database.js";
 
 export const updateController = async (req: Request, res: Response, next: NextFunction) => {
@@ -8,8 +8,8 @@ export const updateController = async (req: Request, res: Response, next: NextFu
 
     db.startTransaction();
 
-    const updateUserUseCase = new UpdateUserUseCase(db);
-    await updateUserUseCase.handle(req.params.id, req.body, { session });
+    const updateResolutionUseCase = new UpdateResolutionUseCase(db);
+    await updateResolutionUseCase.handle(req.params.id, req.body, { session });
 
     await db.commitTransaction();
 
