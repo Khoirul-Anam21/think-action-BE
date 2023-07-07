@@ -1,6 +1,6 @@
 {
   "include": [
-    "**/*.ts",
+    "**/*.ts", "src/modules/user/controller/retrieve.controller.ts",
   ],
   "exclude": [
     "coverage",

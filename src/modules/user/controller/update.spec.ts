@@ -22,7 +22,7 @@ describe("update an user", () => {
     };
 
     const response = await request(app).patch(`/v1/users/${resultFactory.insertedIds[1]}`).send(updateData);
-    console.log(response.body);
+    console.log(response);
     // expect http response
     expect(response.statusCode).toEqual(204);
 
