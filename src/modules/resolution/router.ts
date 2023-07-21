@@ -1,6 +1,8 @@
 import { Router } from "express";
+import multer from "multer";
 import * as controller from "./controller/index.js";
 import { authorizeToken } from "@src/middleware/auth-middleware.js";
+const upload = multer({ dest: "uploads/" });
 
 const resolutionRouter = Router();
 

@@ -5,11 +5,11 @@ import DatabaseConnection, {
 } from "@src/database/connection.js";
 import DatabaseManager from "@src/database/database-manager.js";
 
-export class DeleteManyGoalRepository {
+export class DeleteManyCategoryRepository {
   public databaseManager;
 
   constructor(databaseConnection: DatabaseConnection) {
-    this.databaseManager = new DatabaseManager(databaseConnection, "goals");
+    this.databaseManager = new DatabaseManager(databaseConnection, "categories");
   }
 
   public async handle(filter: DocumentInterface, options?: DeleteOptionsInterface): Promise<DeleteResultInterface> {

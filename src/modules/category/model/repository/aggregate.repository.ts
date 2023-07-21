@@ -5,11 +5,11 @@ import DatabaseConnection, {
 } from "@src/database/connection.js";
 import DatabaseManager from "@src/database/database-manager.js";
 
-export class AggregateGoalRepository {
+export class AggregateCategoryRepository {
   public databaseManager;
 
   constructor(databaseConnection: DatabaseConnection) {
-    this.databaseManager = new DatabaseManager(databaseConnection, "goals");
+    this.databaseManager = new DatabaseManager(databaseConnection, "categories");
   }
   public async aggregate(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

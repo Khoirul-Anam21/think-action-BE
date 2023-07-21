@@ -1,44 +1,40 @@
-import { ObjectId } from "mongodb";
 import request from "supertest";
-import { createApp } from "../../../app.js"; // Assuming your Express app is defined in a file called "app.js"
-import ResolutionFactory from "@src/modules/resolution/model/resolution.factory.js";
+import { createApp } from "../../../app.js";
 import UserFactory from "@src/modules/user/model/user.factory.js";
 import { resetDatabase } from "@src/test/utils.js";
+import { signNewToken } from "@src/utils/jwt.js";
 
-describe("Goal Create API", () => {
-  beforeAll(async () => await resetDatabase());
-  it("should create a new goal", async () => {
+describe("Create Category", () => {
+  beforeAll(async () => {
+    await resetDatabase();
+  });
+  test("Should create a new category for a user", async () => {
+    // create user example
     const userFactory = new UserFactory();
-    const userMock = await userFactory.create();
-    const token = "Bearer " + userMock.accessToken;
-    const category_id = new ObjectId();
-    const resolutionFactory = new ResolutionFactory();
-    const resolutionMock = await resolutionFactory.create();
-    const goalData = {
-      resolution_id: resolutionMock._id, // Replace with an existing resolution ID
-      goal: "My goal",
-      images: ["image1.jpg", "image2.jpg"],
-      category_id, // Replace with an existing category ID
-      shareType: "public",
-      dueDate: "2023-12-31",
-    };
+    const resultFactory: any = await userFactory.create();
+
+    const tokenSigned = signNewToken(
+      process.env.JWT_ISSUER as string,
+      process.env.JWT_SECRET as string,
+      resultFactory._id
+    );
+    const token = `Bearer ${tokenSigned}`;
+
     const app = await createApp();
-    const response = await request(app).post("/v1/goals").send(goalData).set("Authorization", token);
+    const response = await request(app)
+      .post(`/v1/categories`)
+      .send({ category: "New Category" })
+      .set("Authorization", token);
 
     expect(response.status).toBe(201);
-    expect(response.body._id).toBeDefined();
+    expect(response.body).toHaveProperty("_id");
   });
 
-  it("should return an error if required fields are missing", async () => {
-    const userFactory = new UserFactory();
-    const userMock = await userFactory.create();
-    const token = "Bearer " + userMock.accessToken;
-    const goalData = {
-      // Missing required fields
-    };
+  test("Should return 401 if user invalid / unauthorized", async () => {
+    // const invalidUserId = "INVALID_USER_ID";
     const app = await createApp();
-    const response = await request(app).post("/v1/goals").send(goalData).set("Authorization", token);
+    const response = await request(app).post(`/v1/categories`).send({ category: "New Category" });
 
-    expect(response.status).toBe(422);
+    expect(response.status).toBe(401);
   });
 });

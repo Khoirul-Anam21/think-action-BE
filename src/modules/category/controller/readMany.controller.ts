@@ -1,16 +1,16 @@
 import { NextFunction, Request, Response } from "express";
-import { RetrieveAllGoalUseCase } from "../use-case/retrieve-all.use-case.js";
+import { RetrieveAllCategoryUseCase } from "../use-case/retrieve-all-cheers.use-case.js";
 import { db } from "@src/database/database.js";
 import { AuthUserInterface } from "@src/middleware/auth-middleware.js";
 
-export const readManyController = async (req: Request, res: Response, next: NextFunction) => {
+export const readManyCategoryController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const session = db.startSession();
     const userCredential: AuthUserInterface = req.res?.locals.credential;
     db.startTransaction();
-    const auth = userCredential ?? "";
-    const retrieveAllGoalUseCase = new RetrieveAllGoalUseCase(db);
-    const result = await retrieveAllGoalUseCase.handle(auth._id, { session });
+    const auth = userCredential;
+    const retrieveAllResolutionUseCase = new RetrieveAllCategoryUseCase(db);
+    const result = await retrieveAllResolutionUseCase.handle(auth._id?.toString() ?? "", { session });
 
     await db.commitTransaction();
 

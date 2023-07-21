@@ -29,18 +29,16 @@ export class AuthUseCase {
         pageSize: 999,
         sort: "1",
       });
-      console.log(findResult);
       if (findResult.data.length === 0) {
         const user = objClean(
           new UserEntity({
             username: document.name,
             email: document.email,
             accountName: document.name,
-            photo: document.picture,
+            photo: "",
             createdAt: new Date(),
           })
         );
-        console.table(user);
         const session = db.startSession();
         db.startTransaction();
         const newUser = await createUserRepository.handle(objClean(user), { session });

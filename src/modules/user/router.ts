@@ -1,12 +1,15 @@
 import { Router } from "express";
+import multer from "multer";
 import * as controller from "./controller/index.js";
+
+const upload = multer({ dest: "uploads/" });
 
 const userRouter = Router();
 
 // router.get("/", controller.retrieveAllController);
 // router.post("/", controller.createController);
 userRouter.get("/:id", controller.retrieveController);
-userRouter.patch("/:id", controller.updateController);
+userRouter.patch("/:id", upload.single("photo"), controller.updateController);
 userRouter.delete("/:id", controller.deleteController);
 // router.post("/create-many", controller.createManyController);
 // router.post("/update-many", controller.updateManyController);

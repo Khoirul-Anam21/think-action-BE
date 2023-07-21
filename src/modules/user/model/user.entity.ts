@@ -1,9 +1,12 @@
+import { CategoryEntityInterface } from "@src/modules/category/model/category.entity";
+
 export interface UserEntityInterface {
   _id?: string;
   username?: string;
   email?: string;
   accountName?: string;
   photo?: string;
+  categories?: CategoryEntityInterface[];
   accessToken?: string;
   refreshToken?: string;
   createdAt?: Date;
@@ -22,6 +25,7 @@ export class UserEntity implements UserEntityInterface {
   public email?: string;
   public accountName?: string;
   public photo?: string;
+  public categories?: CategoryEntityInterface[];
   public accessToken?: string;
   public refreshToken?: string;
   public createdAt?: Date;
@@ -33,6 +37,7 @@ export class UserEntity implements UserEntityInterface {
     this.email = user.email;
     this.accountName = user.accountName;
     this.photo = user.photo;
+    this.categories = user.categories;
     this.accessToken = user.accessToken;
     this.refreshToken = user.refreshToken;
     this.createdAt = user.createdAt;

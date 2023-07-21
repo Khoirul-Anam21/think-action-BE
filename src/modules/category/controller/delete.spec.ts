@@ -1,44 +1,50 @@
 import { ObjectId } from "mongodb";
 import request from "supertest";
-import { createApp } from "../../../app.js"; // Assuming your Express app is defined in a file called "app.js"
-import ResolutionFactory from "@src/modules/resolution/model/resolution.factory.js";
-import UserFactory from "@src/modules/user/model/user.factory.js";
+import { createApp } from "../../../app.js";
+import { CategoryFactory } from "../model/category.factory.js";
+import { resetDatabase } from "@src/test/utils.js";
 
-describe("Delete Goal API", () => {
-  let goalId: string;
-  let token: string;
-
-  beforeEach(async () => {
-    const userFactory = new UserFactory();
-    const userMock = await userFactory.create();
-    token = "Bearer " + userMock.accessToken;
-    const category_id = new ObjectId();
-    const resolutionFactory = new ResolutionFactory();
-    const resolutionMock = await resolutionFactory.create();
-    const goalData = {
-      resolution_id: resolutionMock._id, // Replace with an existing resolution ID
-      goal: "My goal",
-      images: ["image1.jpg", "image2.jpg"],
-      category_id, // Replace with an existing category ID
-      shareType: "public",
-      dueDate: "2023-12-31",
-    };
-    const app = await createApp();
-    const postGoal = await request(app).post("/v1/goals").send(goalData).set("Authorization", token);
-    goalId = postGoal.body._id;
+describe("Delete Category", () => {
+  beforeAll(async () => {
+    await resetDatabase();
   });
-
-  it("should delete a goal", async () => {
+  test("Should delete a category for a user", async () => {
+    // create user example
+    const categoryFactory = new CategoryFactory();
+    const categories = await categoryFactory.createMany(4);
+    const token = `Bearer ${categories.token}`;
+    console.log(categories);
+    console.log(categories.insertedIds[0]);
     const app = await createApp();
-    const response = await request(app).delete(`/v1/goals/${goalId}`).set("Authorization", token);
-
+    const response = await request(app)
+      .delete(`/v1/categories/${categories.insertedIds[0]}`)
+      .set("Authorization", token);
+    console.log(response.body);
     expect(response.status).toBe(204);
   });
 
-  it("should return an error when deleting with invalid id", async () => {
-    const app = await createApp();
-    const response = await request(app).delete(`/v1/goals/non-existent-id`).set("Authorization", token);
+  test("Should return 404 if category ID is invalid", async () => {
+    const randomCategoryId = new ObjectId(); // Replace with the actual category ID
+    const categoryFactory = new CategoryFactory();
+    const category = await categoryFactory.create();
+    const token = `Bearer ${category.token}`;
 
-    expect(response.status).toBe(400);
+    const app = await createApp();
+    const response = await request(app)
+      .delete(`/v1/categories/${randomCategoryId.toString()}`)
+      .set("Authorization", token);
+
+    expect(response.status).toBe(404);
+  });
+
+  test("Should return 401 if user is invalid", async () => {
+    const categoryFactory = new CategoryFactory();
+    const category = await categoryFactory.create();
+    // const token = `Bearer ${category.token}`;
+
+    const app = await createApp();
+    const response = await request(app).delete(`/v1/categories/${category.id?.toString()}`);
+
+    expect(response.status).toBe(401);
   });
 });

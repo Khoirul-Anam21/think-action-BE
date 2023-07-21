@@ -1,5 +1,6 @@
 import express, { Express } from "express";
 import authRouter from "./modules/auth/router.js";
+import categoryRouter from "./modules/category/router.js";
 import goalRouter from "./modules/goal/router.js";
 import resolutionRouter from "./modules/resolution/router.js";
 import userSupportRouter from "./modules/support/router.js";
@@ -17,6 +18,9 @@ export default async function () {
   app.use("/users", userRouter);
   app.use("/resolutions", resolutionRouter);
   app.use("/goals", goalRouter);
+  // app.use("/completion", completionRouter);
   app.use("/supports", userSupportRouter);
+  app.use("/categories", categoryRouter);
+
   return app;
 }
