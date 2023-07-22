@@ -8,7 +8,6 @@ export const validate = (document: DocumentInterface) => {
     const validation = new Validatorjs(document, {
       user_id: "required",
       resolution: "required",
-      images: "required",
       category_id: "required",
       shareType: "required",
       dueDate: "required|date",

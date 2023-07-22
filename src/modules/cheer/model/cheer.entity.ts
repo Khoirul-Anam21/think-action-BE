@@ -1,17 +1,19 @@
+import { ObjectId } from "mongodb";
+
 export interface CheerEntityInterface {
   _id?: string;
-  post_id?: string;
+  post_id?: string | ObjectId;
   postType?: string;
-  userCheerer_id?: string;
+  userCheerer_id?: string | ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export class CheerEntity implements CheerEntityInterface {
   public _id?: string;
-  public post_id?: string;
+  public post_id?: string | ObjectId;
   public postType?: string;
-  public userCheerer_id?: string;
+  public userCheerer_id?: string | ObjectId;
   public createdAt?: Date | undefined;
   public updatedAt?: Date | undefined;
 

@@ -22,11 +22,11 @@ export class CreateCheerUseCase {
       const userCheer: UserDisplayInterface = await retrieveUserRepository.handle(document.Cheer_id);
       // console.log(document.resolution);
       // save to database
-      const cheer = new CheerEntity({
-        user_id: document.user_id,
-        Cheer: userCheer,
-        createdAt: new Date(),
-      });
+      // const cheer = new CheerEntity({
+      //   userCheerer_id: document.user_id,
+      //   cheer: userCheer,
+      //   createdAt: new Date(),
+      // });
 
       const response = await new CreateCheerRepository(this.db).handle(CheerEntity, options);
       console.log(CheerEntity);

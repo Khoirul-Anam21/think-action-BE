@@ -1,14 +1,14 @@
 import { ObjectId } from "mongodb";
 
 export interface CategoryEntityInterface {
-  _id?: ObjectId | string;
+  _id?: string | ObjectId;
   category?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export class CategoryEntity implements CategoryEntityInterface {
-  public _id?: ObjectId | string;
+  public _id?: string | ObjectId;
   public category?: string;
   public createdAt?: Date | undefined;
   public updatedAt?: Date | undefined;

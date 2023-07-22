@@ -1,6 +1,6 @@
 import { ApiError } from "@point-hub/express-error-handler";
 import { NextFunction, Request, Response } from "express";
-import { CreateSupportingUseCase } from "../use-case/create.use-case.js";
+import { CreateCheerUseCase } from "../use-case/create.use-case.js";
 import { db } from "@src/database/database.js";
 import { AuthUserInterface } from "@src/middleware/auth-middleware.js";
 
@@ -11,7 +11,7 @@ export const createController = async (req: Request, res: Response, next: NextFu
 
     db.startTransaction();
 
-    const createSupportingUseCase = new CreateSupportingUseCase(db);
+    const createSupportingUseCase = new CreateCheerUseCase(db);
     const result = await createSupportingUseCase.handle({ user_id: userCredential._id, ...req.body }, { session });
     if (result === undefined) throw new ApiError(404);
 

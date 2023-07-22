@@ -11,7 +11,9 @@ export const createController = async (req: Request, res: Response, next: NextFu
     db.startTransaction();
 
     const createResolutionUseCase = new CreateResolutionUseCase(db);
-    const result = await createResolutionUseCase.handle({ user_id: userCredential._id, ...req.body }, { session });
+    const result = await createResolutionUseCase.handle({ user_id: userCredential._id, ...req.body }, req.files, {
+      session,
+    });
 
     await db.commitTransaction();
 

@@ -4,7 +4,7 @@ import { authorizeToken } from "@src/middleware/auth-middleware.js";
 
 const cheerRouter = Router();
 
-cheerRouter.get("/", authorizeToken, controller.readManySupporterController);
+cheerRouter.get("/", authorizeToken, controller.readManyCheersController);
 cheerRouter.post("/", authorizeToken, controller.createController);
 cheerRouter.delete("/:id", authorizeToken, controller.deleteController);
 

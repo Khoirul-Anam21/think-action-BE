@@ -13,14 +13,23 @@ export class CreateResolutionUseCase {
     this.db = db;
   }
 
-  public async handle(document: DocumentInterface, options: CreateOptionsInterface) {
+  public async handle(
+    document: DocumentInterface,
+    images:
+      | Express.Multer.File[]
+      | {
+          [fieldname: string]: Express.Multer.File[];
+        }
+      | undefined,
+    options: CreateOptionsInterface
+  ) {
     try {
       // validate request body
       validate(document);
       // find user
       const retrieveUserRepository = new RetrieveUserRepository(this.db);
       const userFind = await retrieveUserRepository.handle(document.user_id);
-      console.log(document.resolution);
+      console.log(images);
       // save to database
       const resolutionEntity = new ResolutionEntity({
         user: {

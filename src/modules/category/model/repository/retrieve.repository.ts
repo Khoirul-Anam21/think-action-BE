@@ -1,9 +1,10 @@
+import { ObjectId } from "mongodb";
 import { CategoryEntityInterface } from "../category.entity.js";
 import DatabaseConnection, { RetrieveOptionsInterface } from "@src/database/connection.js";
 import DatabaseManager from "@src/database/database-manager.js";
 
 interface ResponseCategoryInterface extends CategoryEntityInterface {
-  _id: string;
+  _id?: string | ObjectId;
 }
 
 export class RetrieveCategoryRepository {
@@ -17,7 +18,7 @@ export class RetrieveCategoryRepository {
     const response: CategoryEntityInterface = await this.databaseManager.retrieve(id, options);
 
     return {
-      _id: response._id as string,
+      _id: response._id?.toString(),
       ...response,
     };
   }
