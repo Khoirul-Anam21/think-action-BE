@@ -8,6 +8,7 @@ export interface ResolutionEntityInterface {
   images?: string[];
   category_id?: ObjectId;
   shareType?: string;
+  postType?: string;
   completed?: boolean;
   dueDate?: Date;
   createdAt?: Date;
@@ -21,6 +22,7 @@ export class ResolutionEntity implements ResolutionEntityInterface {
   public images?: string[];
   public category_id?: ObjectId;
   public shareType?: string;
+  public postType?: string;
   public completed?: boolean;
   public dueDate?: Date;
   public createdAt?: Date;
@@ -33,6 +35,7 @@ export class ResolutionEntity implements ResolutionEntityInterface {
     this.images = resolution.images;
     this.category_id = resolution.category_id;
     this.shareType = resolution.shareType;
+    this.postType = resolution.postType;
     this.completed = resolution.completed;
     this.dueDate = resolution.dueDate;
     this.createdAt = resolution.createdAt;

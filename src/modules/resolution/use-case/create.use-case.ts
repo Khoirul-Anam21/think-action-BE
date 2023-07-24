@@ -36,6 +36,7 @@ export class CreateResolutionUseCase {
         images: imageUrls,
         category_id: document.category_id, // untuk sementara
         shareType: document.shareType,
+        postType: "resolution",
         completed: false,
         dueDate: new Date(document.dueDate),
         createdAt: new Date(),
