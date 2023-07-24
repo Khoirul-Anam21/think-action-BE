@@ -6,7 +6,7 @@ import { UserEntity } from "../model/user.entity.js";
 import { validate } from "../validation/update.validation.js";
 import DatabaseConnection, { UpdateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
 import { validateId } from "@src/utils/id-validator.js";
-import uploader, { deleteFileAfterUpload, getCloudinaryPublicId } from "service.other/cloudinary/index.js";
+import uploader, { deleteFileAfterUpload, getCloudinaryPublicId } from "@src/services/cloudinary/index.js";
 
 export class UpdateUserUseCase {
   private db: DatabaseConnection;
@@ -35,7 +35,7 @@ export class UpdateUserUseCase {
 
         const fileUpload = photoFile.path;
         const upload = await uploader.upload(fileUpload, {
-          folder: "think-action/profile-photos",
+          folder: "think-action/profile-photos", 
           resource_type: "image",
         });
 

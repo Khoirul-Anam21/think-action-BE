@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { RetrieveAllCategoryUseCase } from "../use-case/retrieve-all-cheers.use-case.js";
+import { RetrieveAllCategoryUseCase } from "../use-case/retrieve-all.use-case.js";
 import { db } from "@src/database/database.js";
 import { AuthUserInterface } from "@src/middleware/auth-middleware.js";
 

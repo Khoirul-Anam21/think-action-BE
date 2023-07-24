@@ -11,8 +11,8 @@ export const createController = async (req: Request, res: Response, next: NextFu
 
     db.startTransaction();
 
-    const createSupportingUseCase = new CreateCategoryUseCase(db);
-    const result = await createSupportingUseCase.handle({ user_id: userCredential._id, ...req.body }, { session });
+    const createCategoryUseCase = new CreateCategoryUseCase(db);
+    const result = await createCategoryUseCase.handle({ user_id: userCredential._id, ...req.body }, { session });
     if (result === undefined) throw new ApiError(404);
 
     await db.commitTransaction();
