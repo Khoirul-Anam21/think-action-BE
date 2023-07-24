@@ -5,6 +5,7 @@ import { ResolutionEntity } from "../model/resolution.entity.js";
 import { validate } from "../validation/create.validation.js";
 import DatabaseConnection, { CreateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
 import { RetrieveUserRepository } from "@src/modules/user/model/repository/retrieve.repository.js";
+import uploader, { deleteFileAfterUpload } from "service.other/cloudinary/index.js";
 
 export class CreateResolutionUseCase {
   private db: DatabaseConnection;
@@ -13,33 +14,27 @@ export class CreateResolutionUseCase {
     this.db = db;
   }
 
-  public async handle(
-    document: DocumentInterface,
-    images:
-      | Express.Multer.File[]
-      | {
-          [fieldname: string]: Express.Multer.File[];
-        }
-      | undefined,
-    options: CreateOptionsInterface
-  ) {
+  public async handle(document: DocumentInterface, images: any, options: CreateOptionsInterface) {
     try {
       // validate request body
       validate(document);
       // find user
       const retrieveUserRepository = new RetrieveUserRepository(this.db);
       const userFind = await retrieveUserRepository.handle(document.user_id);
-      console.log(images);
+      const imageUrls = await Promise.all(
+        images?.map(async (image: Express.Multer.File) => {
+          const path = image.path;
+          const uploadRes = await uploader.upload(path, { folder: "think-action/posts", resource_type: "image" });
+          await deleteFileAfterUpload(path);
+          return uploadRes.secure_url;
+        })
+      );
       // save to database
       const resolutionEntity = new ResolutionEntity({
-        user: {
-          _id: userFind._id,
-          accountName: userFind.accountName,
-          photo: userFind.photo,
-        },
+        user_id: userFind._id,
         resolution: document.resolution,
-        images: document.images,
-        category_id: new ObjectId(document.category_id), // untuk sementara
+        images: imageUrls,
+        category_id: document.category_id, // untuk sementara
         shareType: document.shareType,
         completed: false,
         dueDate: new Date(document.dueDate),

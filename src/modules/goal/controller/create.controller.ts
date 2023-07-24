@@ -11,7 +11,7 @@ export const createController = async (req: Request, res: Response, next: NextFu
     db.startTransaction();
 
     const createGoalUseCase = new CreateGoalUseCase(db);
-    const result = await createGoalUseCase.handle({ user_id: userCredential._id, ...req.body }, { session });
+    const result = await createGoalUseCase.handle({ user_id: userCredential._id, ...req.body }, req.files, { session });
 
     await db.commitTransaction();
 
