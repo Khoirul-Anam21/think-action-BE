@@ -17,13 +17,6 @@ export class DeleteCheerUseCase {
       const deleteResolutionRepository = new DeleteCheerRepository(this.db);
       await deleteResolutionRepository.handle(id, options);
       return {};
-      // const readUserRepository = new RetrieveUserRepository(this.db);
-      // await readUserRepository.handle(id);
-      // const response = await new DeleteUserRepository(this.db).handle(id, options);
-      // return {
-      //   acknowledged: response.acknowledged,
-      //   deletedCount: response.deletedCount,
-      // };
     } catch (error) {
       console.log(error);
       throw error;

@@ -7,17 +7,18 @@ export const readManyCheersController = async (req: Request, res: Response, next
   try {
     const session = db.startSession();
     const userCredential: AuthUserInterface = req.res?.locals.credential;
+    const postId = req.query.post_id;
+    const postType = req.query.postType;
     db.startTransaction();
-    const auth = userCredential ?? "";
     const retrieveAllResolutionUseCase = new RetrieveAllCheersUseCase(db);
-    const result = await retrieveAllResolutionUseCase.handle(auth._id, { session });
+    const result = await retrieveAllResolutionUseCase.handle(postId, postType, { session });
 
     await db.commitTransaction();
 
     res.status(200).json(result);
   } catch (error) {
     await db.abortTransaction();
-    next(error);
+    next(error); 
   } finally {
     await db.endSession();
   }

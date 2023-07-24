@@ -22,11 +22,19 @@ export class CreateCategoryUseCase {
       // console.log(document.resolution);
       // save to database
       const category = new CategoryEntity({
-        _id: new ObjectId(),
+        _id: new ObjectId().toString(), 
         category: document.category,
         createdAt: new Date(),
       });
 
+      if (!user.categories) {
+        const newCategory = [category];
+        await updateUserRepository.handle(document.user_id, { categories: newCategory });
+        return {
+          _id: category._id,
+        };
+      }
+   
       const userCategories = user.categories;
       userCategories?.push(category);
 
