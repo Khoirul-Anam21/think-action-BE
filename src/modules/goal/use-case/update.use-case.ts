@@ -14,7 +14,7 @@ export class UpdateGoalUseCase {
     this.db = db;
   }
 
-  public async handle(id: string, document: DocumentInterface, options?: UpdateOptionsInterface) {
+  public async handle(id: string, document: DocumentInterface, images: any, options?: UpdateOptionsInterface) {
     try {
       // validate request body
       // validate(document);

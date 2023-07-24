@@ -9,7 +9,7 @@ export const updateController = async (req: Request, res: Response, next: NextFu
     db.startTransaction();
 
     const updateResolutionUseCase = new UpdateResolutionUseCase(db);
-    await updateResolutionUseCase.handle(req.params.id, req.body, { session });
+    await updateResolutionUseCase.handle(req.params.id, req.body, req.files, { session });
 
     await db.commitTransaction();
 
