@@ -3,12 +3,14 @@ import Validatorjs from "validatorjs";
 import { DocumentInterface } from "@src/database/connection.js";
 
 // https://github.com/mikeerickson/validatorjs
-export const validateCreateGoal = (document: DocumentInterface) => {
+export const validateCreateCompletion = (document: DocumentInterface) => {
   try {
     const validation = new Validatorjs(document, {
-      goal: "required",
+      user_id: "required",
+      caption: "required",
       images: "required",
       category_id: "required",
+      completedResolution: "required|boolean",
       shareType: "required",
       dueDate: "required|date",
     });

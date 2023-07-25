@@ -1,11 +1,12 @@
 import uploader, { deleteFileAfterUpload } from "../../../services/cloudinary/index.js";
-import { CreateResolutionRepository } from "../model/repository/create.repository.js";
-import { ResolutionEntity } from "../model/resolution.entity.js";
-import { validate } from "../validation/create.validation.js";
+import { CompletionEntity } from "../model/completion.entity.js";
+import { CreateCompletionRepository } from "../model/repository/create.repository.js";
+// import { validateCreateCompletion } from "../validation/create.validation.js";
+import { validateCreateCompletion } from "../validation/create.validation.js";
 import DatabaseConnection, { CreateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
 import { RetrieveUserRepository } from "@src/modules/user/model/repository/retrieve.repository.js";
 
-export class CreateResolutionUseCase {
+export class CreateCompletionUseCase {
   private db: DatabaseConnection;
 
   constructor(db: DatabaseConnection) {
@@ -15,10 +16,12 @@ export class CreateResolutionUseCase {
   public async handle(document: DocumentInterface, images: any, options: CreateOptionsInterface) {
     try {
       // validate request body
-      validate(document);
+      validateCreateCompletion({ ...document, images });
       // find user
       const retrieveUserRepository = new RetrieveUserRepository(this.db);
-      const userFind = await retrieveUserRepository.handle(document.user_id);
+      await retrieveUserRepository.handle(document.user_id);
+
+      // save to database
       const imageUrls = await Promise.all(
         images?.map(async (image: Express.Multer.File) => {
           const path = image.path;
@@ -27,21 +30,21 @@ export class CreateResolutionUseCase {
           return uploadRes.secure_url;
         })
       );
-      // save to database
-      const resolutionEntity = new ResolutionEntity({
-        user_id: userFind._id,
-        resolution: document.resolution,
+      const completion = new CompletionEntity({
+        user_id: document.user_id,
+        caption: document.caption,
         images: imageUrls,
         category_id: document.category_id, // untuk sementara
+        completedResolution: document.completedResolution,
         shareType: document.shareType,
-        postType: "resolution",
-        completed: false,
+        postType: "completion",
         dueDate: new Date(document.dueDate),
         createdAt: new Date(),
       });
 
-      const response = await new CreateResolutionRepository(this.db).handle(resolutionEntity, options);
-      console.log(resolutionEntity);
+      console.log(document.user_id);
+
+      const response = await new CreateCompletionRepository(this.db).handle(completion, options);
 
       return {
         acknowledged: response.acknowledged,

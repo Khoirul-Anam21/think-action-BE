@@ -22,6 +22,6 @@ export const getCloudinaryPublicId = (url: string) => {
   const lastElement = splitStr[splitStr.length - 1];
   const splitLastElement = lastElement.split(".");
   return splitLastElement[0];
-}
+};
 
 export default uploader;

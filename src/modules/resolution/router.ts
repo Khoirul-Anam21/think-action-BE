@@ -8,7 +8,7 @@ const resolutionRouter = Router();
 
 // router.get("/", controller.retrieveAllController);
 resolutionRouter.post("/", upload.array("images"), authorizeToken, controller.createController);
-resolutionRouter.get("/", controller.readManyController);
+resolutionRouter.get("/", authorizeToken, controller.readManyController);
 resolutionRouter.get("/user", authorizeToken, controller.readManyController);
 // router.get("/:id", controller.retrieveController);
 resolutionRouter.put("/:id", upload.array("images"), controller.updateController);
