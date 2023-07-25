@@ -3,7 +3,7 @@ import { UserDisplayInterface } from "@src/modules/user/model/user.entity";
 
 export interface GoalEntityInterface {
   _id?: string;
-  user?: UserDisplayInterface;
+  user_id?: string | ObjectId;
   resolution_id?: ObjectId;
   goal?: string;
   images?: string[];
@@ -16,7 +16,7 @@ export interface GoalEntityInterface {
 
 export class GoalEntity implements GoalEntityInterface {
   public _id?: string;
-  public user?: UserDisplayInterface;
+  public user_id?: string | ObjectId | undefined;
   public resolution_id?: ObjectId;
   public goal?: string;
   public images?: string[];
@@ -28,7 +28,7 @@ export class GoalEntity implements GoalEntityInterface {
 
   constructor(goal: GoalEntityInterface) {
     this._id = goal._id;
-    this.user = goal.user;
+    this.user_id = this.user_id;
     this.resolution_id = goal.resolution_id;
     this.goal = goal.goal;
     this.images = goal.images;

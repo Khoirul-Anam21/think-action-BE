@@ -44,6 +44,6 @@ export const authorizeToken = async (req: Request, res: Response, next: NextFunc
 
     return next();
   } catch (error) {
-    next(error);
+    throw new ApiError(401, { msg: "Invalid Token", detail: error });
   }
 };
