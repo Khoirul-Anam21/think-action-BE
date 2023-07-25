@@ -6,6 +6,7 @@ import resolutionRouter from "./modules/resolution/router.js";
 import userSupportRouter from "./modules/support/router.js";
 import userRouter from "./modules/user/router.js";
 import cheerRouter from "./modules/cheer/router.js";
+import commentRouter from "./modules/comment/router.js";
 
 export default async function () {
   const app: Express = express();
@@ -23,6 +24,7 @@ export default async function () {
   app.use("/cheers", cheerRouter);
   app.use("/supports", userSupportRouter);
   app.use("/categories", categoryRouter);
+  app.use("/comments", commentRouter)
 
   return app;
 }

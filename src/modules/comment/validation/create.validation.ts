@@ -9,6 +9,23 @@ export const validateCreateComment = (document: DocumentInterface) => {
       user_id: "required|size:24",
       post_id: "required|size:24",
       postType: "required",
+      comment: "required"
+    });
+
+    if (validation.fails()) {
+      throw new ApiError(422, validation.errors.errors);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const validateCreateReply = (document: DocumentInterface) => {
+  try {
+    const validation = new Validatorjs(document, {
+      user_id: "required|size:24",
+      comment_id: "required|size:24",
+      comment: "required"
     });
 
     if (validation.fails()) {

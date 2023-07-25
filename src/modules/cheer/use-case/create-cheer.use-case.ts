@@ -1,7 +1,6 @@
 import { ObjectId } from "mongodb";
 import { CheerEntity } from "../model/cheer.entity.js";
 import { CreateCheerRepository } from "../model/repository/create.repository.js";
-import { validate } from "../validation/create.validation.js";
 import DatabaseConnection, { CreateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
 import { RetrieveUserRepository } from "@src/modules/user/model/repository/retrieve.repository.js";
 import { UserDisplayInterface } from "@src/modules/user/model/user.entity.js";
@@ -29,7 +28,7 @@ export class CreateCheerUseCase {
       },);
 
       console.log(cheers);
-      if (cheers.data.length === 0) throw new ApiError(400, { msg: "You already cheered this post" })
+      if (cheers.data.length > 0) throw new ApiError(400, { msg: "You already cheered this post" })
 
       await FindPost(document.postType, document.post_id, this.db, options);
 

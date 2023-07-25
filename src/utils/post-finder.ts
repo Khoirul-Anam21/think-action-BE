@@ -18,7 +18,6 @@ export const FindPost = async (postType: string, postId: string, db: DatabaseCon
       break;
     default:
       throw new ApiError(404, { msg: "post not found" });
-      break;
   }
   return result;
 }
