@@ -6,7 +6,7 @@ import { ResolutionEntity } from "../model/resolution.entity.js";
 import { validate } from "../validation/update.validation.js";
 import DatabaseConnection, { UpdateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
 import { validateId } from "@src/utils/id-validator.js";
-import uploader, { deleteFileAfterUpload } from "service.other/cloudinary/index.js";
+import uploader, { deleteFileAfterUpload } from "../../../services/cloudinary/index.js";
 
 export class UpdateResolutionUseCase {
   private db: DatabaseConnection;

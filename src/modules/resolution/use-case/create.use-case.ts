@@ -5,7 +5,7 @@ import { ResolutionEntity } from "../model/resolution.entity.js";
 import { validate } from "../validation/create.validation.js";
 import DatabaseConnection, { CreateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
 import { RetrieveUserRepository } from "@src/modules/user/model/repository/retrieve.repository.js";
-import uploader, { deleteFileAfterUpload } from "service.other/cloudinary/index.js";
+import uploader, { deleteFileAfterUpload } from "../../../services/cloudinary/index.js";
 
 export class CreateResolutionUseCase {
   private db: DatabaseConnection;
