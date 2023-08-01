@@ -1,5 +1,5 @@
 import request from "supertest";
-import { createApp } from "../../../app.js"; // Assuming your Express app is exported as "app"
+import { createApp } from "../../../src/app.js"; // Assuming your Express app is exported as "app"
 
 describe("Delete API", () => {
   let supporterId: string;

@@ -1,8 +1,8 @@
-import { CheerEntityInterface } from "../cheer.entity.js";
+import { NotificationEntityInterface } from "../notification.entity.js";
 import DatabaseConnection, { QueryInterface, RetrieveAllOptionsInterface } from "@src/database/connection.js";
 import DatabaseManager from "@src/database/database-manager.js";
 
-interface DataInterface extends CheerEntityInterface {
+interface DataInterface extends NotificationEntityInterface {
   _id: string;
 }
 
@@ -16,11 +16,11 @@ interface ResponseInterface {
   };
 }
 
-export class RetrieveAllCheerRepository {
+export class RetrieveAllNotificationRepository {
   public databaseManager;
 
   constructor(databaseConnection: DatabaseConnection) {
-    this.databaseManager = new DatabaseManager(databaseConnection, "cheers");
+    this.databaseManager = new DatabaseManager(databaseConnection, "notifications");
   }
 
   public async handle(query: QueryInterface, options?: RetrieveAllOptionsInterface): Promise<ResponseInterface> {

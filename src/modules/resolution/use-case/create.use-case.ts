@@ -1,11 +1,9 @@
-import { objClean } from "@point-hub/express-utils";
-import { ObjectId } from "mongodb";
+import uploader, { deleteFileAfterUpload } from "../../../services/cloudinary/index.js";
 import { CreateResolutionRepository } from "../model/repository/create.repository.js";
 import { ResolutionEntity } from "../model/resolution.entity.js";
 import { validate } from "../validation/create.validation.js";
 import DatabaseConnection, { CreateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
 import { RetrieveUserRepository } from "@src/modules/user/model/repository/retrieve.repository.js";
-import uploader, { deleteFileAfterUpload } from "../../../services/cloudinary/index.js";
 
 export class CreateResolutionUseCase {
   private db: DatabaseConnection;

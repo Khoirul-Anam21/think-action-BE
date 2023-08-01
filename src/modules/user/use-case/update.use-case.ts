@@ -3,10 +3,16 @@ import { objClean } from "@point-hub/express-utils";
 import { RetrieveUserRepository } from "../model/repository/retrieve.repository.js";
 import { UpdateUserRepository } from "../model/repository/update.repository.js";
 import { UserEntity } from "../model/user.entity.js";
-import { validate } from "../validation/update.validation.js";
-import DatabaseConnection, { UpdateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
+// import { validate } from "../validation/update.validation.js";
+import DatabaseConnection, {
+  UpdateOptionsInterface,
+  DocumentInterface,
+} from "@src/database/connection.js";
+import uploader, {
+  deleteFileAfterUpload,
+  getCloudinaryPublicId,
+} from "@src/services/cloudinary/index.js";
 import { validateId } from "@src/utils/id-validator.js";
-import uploader, { deleteFileAfterUpload, getCloudinaryPublicId } from "@src/services/cloudinary/index.js";
 
 export class UpdateUserUseCase {
   private db: DatabaseConnection;
@@ -23,19 +29,22 @@ export class UpdateUserUseCase {
   ) {
     try {
       // validate request body
-      validate(document);
+      // validate(document);
+      validateId({ id });
 
       // find user for id validation
       const readUserRepository = new RetrieveUserRepository(this.db);
-      await readUserRepository.handle(id);
+      const userData = await readUserRepository.handle(id);
       if (photoFile) {
-        // aplot foto
-        const cldPublicId = getCloudinaryPublicId(document?.photo);
-        await uploader.destroy(cldPublicId, { resource_type: "image" });
+        // hapus foto sebelumnya
+        if (userData.photo) {
+          const cldPublicId = getCloudinaryPublicId(userData?.photo);
+          await uploader.destroy(cldPublicId, { resource_type: "image" });
+        }
 
         const fileUpload = photoFile.path;
         const upload = await uploader.upload(fileUpload, {
-          folder: "think-action/profile-photos", 
+          folder: "think-action/profile-photos",
           resource_type: "image",
         });
 

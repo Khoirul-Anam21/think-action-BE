@@ -1,12 +1,12 @@
 import express, { Express } from "express";
 import authRouter from "./modules/auth/router.js";
 import categoryRouter from "./modules/category/router.js";
+import cheerRouter from "./modules/cheer/router.js";
+import completionRouter from "./modules/completion/router.js";
 import goalRouter from "./modules/goal/router.js";
 import resolutionRouter from "./modules/resolution/router.js";
 import userSupportRouter from "./modules/support/router.js";
 import userRouter from "./modules/user/router.js";
-import cheerRouter from "./modules/cheer/router.js";
-import commentRouter from "./modules/comment/router.js";
 
 export default async function () {
   const app: Express = express();
@@ -20,6 +20,7 @@ export default async function () {
   app.use("/users", userRouter);
   app.use("/resolutions", resolutionRouter);
   app.use("/goals", goalRouter);
+  app.use("/completions", completionRouter);
   // app.use("/completion", completionRouter);
   app.use("/cheers", cheerRouter);
   app.use("/supports", userSupportRouter);

@@ -6,7 +6,6 @@ import { DocumentInterface } from "@src/database/connection.js";
 export const validateCreateGoal = (document: DocumentInterface) => {
   try {
     const validation = new Validatorjs(document, {
-      resolution_id: "required",
       goal: "required",
       images: "required",
       category_id: "required",

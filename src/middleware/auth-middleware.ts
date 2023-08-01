@@ -1,6 +1,7 @@
 import { ApiError } from "@point-hub/express-error-handler";
 import { NextFunction, Request, Response } from "express";
 import { db } from "@src/database/database.js";
+import { RetrieveUserRepository } from "@src/modules/user/model/repository/retrieve.repository.js";
 import { UserEntityInterface } from "@src/modules/user/model/user.entity.js";
 import { RetrieveUserUseCase } from "@src/modules/user/use-case/retrieve.use-case.js";
 import { verifyToken } from "@src/utils/jwt.js";
@@ -11,7 +12,11 @@ export interface AuthUserInterface {
   email?: string;
 }
 
-export const authorizeToken = async (req: Request, res: Response, next: NextFunction) => {
+export const authorizeToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const authorizationHeader = req.headers.authorization ?? "";
 
@@ -20,7 +25,10 @@ export const authorizeToken = async (req: Request, res: Response, next: NextFunc
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const token: any = verifyToken(authorizationHeader.split(" ")[1], process.env.JWT_SECRET as string);
+    const token: any = verifyToken(
+      authorizationHeader.split(" ")[1],
+      process.env.JWT_SECRET as string
+    );
 
     // token invalid
     if (!token) {
@@ -32,8 +40,11 @@ export const authorizeToken = async (req: Request, res: Response, next: NextFunc
       throw new ApiError(401, { msg: "token expired" });
     }
 
-    const readAllUserUseCase = new RetrieveUserUseCase(db);
-    const user: UserEntityInterface = await readAllUserUseCase.handle(token.sub);
+    // const readAllUserUseCase = new RetrieveUserUseCase(db);
+    const readManyUserRepository = new RetrieveUserRepository(db);
+    const user: UserEntityInterface = await readManyUserRepository.handle(
+      token.sub
+    );
     const result: AuthUserInterface = {
       _id: user._id,
       username: user.username,

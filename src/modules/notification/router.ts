@@ -2,10 +2,18 @@ import { Router } from "express";
 import * as controller from "./controller/index.js";
 import { authorizeToken } from "@src/middleware/auth-middleware.js";
 
-const cheerRouter = Router();
+const notificationRouter = Router();
 
-cheerRouter.get("/", authorizeToken, controller.readManyCheersController);
-cheerRouter.post("/", authorizeToken, controller.createController);
-cheerRouter.delete("/:id", authorizeToken, controller.deleteController);
+notificationRouter.get(
+  "/",
+  authorizeToken,
+  controller.readManyCheersController
+);
+notificationRouter.post("/", authorizeToken, controller.createController);
+notificationRouter.delete("/:id", authorizeToken, controller.deleteController);
 
-export default cheerRouter;
+// create notif add default value, read false, after opened read become false by sending an array of notif id
+// in notifying in post, get user identity by getting post by post id
+// don't display a content if account is private
+
+export default notificationRouter;

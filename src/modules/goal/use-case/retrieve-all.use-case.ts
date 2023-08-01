@@ -1,6 +1,9 @@
 import { ObjectId } from "mongodb";
 import { RetrieveAllGoalRepository } from "../model/repository/retrieve-all.repository.js";
-import DatabaseConnection, { QueryInterface, RetrieveAllOptionsInterface } from "@src/database/connection.js";
+import DatabaseConnection, {
+  QueryInterface,
+  RetrieveAllOptionsInterface,
+} from "@src/database/connection.js";
 
 export class RetrieveAllGoalUseCase {
   private db: DatabaseConnection;
@@ -9,7 +12,12 @@ export class RetrieveAllGoalUseCase {
     this.db = db;
   }
 
-  public async handle(user_id?: string, options?: RetrieveAllOptionsInterface, page = 1, limit = 10) {
+  public async handle(
+    user_id?: string,
+    options?: RetrieveAllOptionsInterface,
+    page = 1,
+    limit = 10
+  ) {
     try {
       console.log(typeof user_id);
       const retrieveAllGoalRepository = new RetrieveAllGoalRepository(this.db);
@@ -25,11 +33,6 @@ export class RetrieveAllGoalUseCase {
         options
       );
       return result;
-      // const response = await new RetrieveAllUserRepository(this.db).handle(query, options);
-      // return {
-      //   users: response.data,
-      //   pagination: response.pagination,
-      // };
     } catch (error) {
       throw error;
     }

@@ -1,3 +1,4 @@
+import { ApiError } from "@point-hub/express-error-handler";
 import { ObjectId } from "mongodb";
 import { CategoryEntity } from "../model/category.entity.js";
 import { validateCategoryCreate } from "../validation/create.validation.js";
@@ -22,7 +23,7 @@ export class CreateCategoryUseCase {
       // console.log(document.resolution);
       // save to database
       const category = new CategoryEntity({
-        _id: new ObjectId().toString(), 
+        _id: new ObjectId().toString(),
         category: document.category,
         createdAt: new Date(),
       });
@@ -34,8 +35,10 @@ export class CreateCategoryUseCase {
           _id: category._id,
         };
       }
-   
+
       const userCategories = user.categories;
+      if (userCategories.length === 7) throw new ApiError(400, { msg: "max category is 7" });
+
       userCategories?.push(category);
 
       await updateUserRepository.handle(document.user_id, { categories: userCategories });

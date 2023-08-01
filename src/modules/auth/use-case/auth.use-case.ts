@@ -36,6 +36,7 @@ export class AuthUseCase {
             email: document.email,
             accountName: document.name,
             photo: "",
+            accountType: "public",
             createdAt: new Date(),
           })
         );

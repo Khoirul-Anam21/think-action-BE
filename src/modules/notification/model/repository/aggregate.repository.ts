@@ -5,11 +5,11 @@ import DatabaseConnection, {
 } from "@src/database/connection.js";
 import DatabaseManager from "@src/database/database-manager.js";
 
-export class AggregateCheerRepository {
+export class AggregateNotificationRepository {
   public databaseManager;
 
   constructor(databaseConnection: DatabaseConnection) {
-    this.databaseManager = new DatabaseManager(databaseConnection, "cheers");
+    this.databaseManager = new DatabaseManager(databaseConnection, "notifications");
   }
   public async aggregate(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

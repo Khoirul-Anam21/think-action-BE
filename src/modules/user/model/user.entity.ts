@@ -6,7 +6,9 @@ export interface UserEntityInterface {
   email?: string;
   accountName?: string;
   photo?: string;
+  accountType?: string;
   categories?: CategoryEntityInterface[];
+  biography?: string;
   accessToken?: string;
   refreshToken?: string;
   createdAt?: Date;
@@ -26,6 +28,8 @@ export class UserEntity implements UserEntityInterface {
   public accountName?: string;
   public photo?: string;
   public categories?: CategoryEntityInterface[];
+  public biography?: string | undefined;
+  public accountType?: string;
   public accessToken?: string;
   public refreshToken?: string;
   public createdAt?: Date;
@@ -38,6 +42,8 @@ export class UserEntity implements UserEntityInterface {
     this.accountName = user.accountName;
     this.photo = user.photo;
     this.categories = user.categories;
+    this.accountType = user.accountType;
+    this.biography = user.biography;
     this.accessToken = user.accessToken;
     this.refreshToken = user.refreshToken;
     this.createdAt = user.createdAt;

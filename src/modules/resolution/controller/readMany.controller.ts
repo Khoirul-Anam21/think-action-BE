@@ -5,12 +5,15 @@ import { AuthUserInterface } from "@src/middleware/auth-middleware.js";
 
 export const readManyController = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    console.log("tes");
     const session = db.startSession();
     const userCredential: AuthUserInterface = req.res?.locals.credential;
     db.startTransaction();
     const auth = userCredential ?? "";
     const retrieveAllResolutionUseCase = new RetrieveAllResolutionUseCase(db);
-    const result = await retrieveAllResolutionUseCase.handle(auth._id, { session });
+    const result = await retrieveAllResolutionUseCase.handle(auth._id, {
+      session,
+    });
 
     await db.commitTransaction();
 
