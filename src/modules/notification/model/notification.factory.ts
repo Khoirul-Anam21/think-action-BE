@@ -2,13 +2,13 @@ import { faker } from "@faker-js/faker";
 import Factory from "@point-hub/express-factory";
 import { ObjectId } from "mongodb";
 import { NotificationEntityInterface } from "./notification.entity.js";
-import { CreateManyCheerRepository } from "./repository/create-many.repository.js";
-import { CreateCheerRepository } from "./repository/create.repository.js";
+import { CreateManyNotificationRepository } from "./repository/create-many.repository.js";
+import { CreateNotificationRepository } from "./repository/create.repository.js";
 import { db } from "@src/database/database.js";
 
 export class CheerFactory extends Factory<NotificationEntityInterface> {
   async createMany(count: number) {
-    const cheerRepository = new CreateManyCheerRepository(db);
+    const cheerRepository = new CreateManyNotificationRepository(db);
     return await cheerRepository.handle(this.makeMany(count));
   }
   definition() {
@@ -20,7 +20,7 @@ export class CheerFactory extends Factory<NotificationEntityInterface> {
   }
 
   async create() {
-    const cheerRepository = new CreateCheerRepository(db);
+    const cheerRepository = new CreateNotificationRepository(db);
     return await cheerRepository.handle(this.makeOne());
   }
 }

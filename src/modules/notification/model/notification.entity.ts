@@ -12,6 +12,14 @@ export interface NotificationEntityInterface {
   updatedAt?: Date;
 }
 
+export interface NotificationRequest {
+  user_id: string;
+  post_id?: string;
+  postType?: string;
+  userNotified?: string;
+  messageType: string;
+}
+
 export class NotificationEntity implements NotificationEntityInterface {
   public _id?: string;
   public post_id?: string | ObjectId;
@@ -29,6 +37,7 @@ export class NotificationEntity implements NotificationEntityInterface {
     this.postType = notification.postType;
     this.user_id = notification.user_id;
     this.userNotified_id = notification.userNotified_id;
+    this.message = notification.message;
     this.read = notification.read;
     this.createdAt = notification.createdAt;
     this.updatedAt = notification.updatedAt;

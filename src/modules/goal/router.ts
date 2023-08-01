@@ -6,8 +6,23 @@ const upload = multer({ dest: "uploads/" });
 
 const goalRouter = Router();
 
-goalRouter.post("/", authorizeToken, upload.array("images"), controller.createController);
-goalRouter.put("/:id", authorizeToken, upload.array("images"), controller.updateController);
+goalRouter.post(
+  "/",
+  authorizeToken,
+  upload.array("images"),
+  controller.createController
+);
+goalRouter.put(
+  "/:id",
+  authorizeToken,
+  upload.array("images"),
+  controller.updateController
+);
+goalRouter.get(
+  "/category/:id",
+  authorizeToken,
+  controller.readManyByCategoryController
+);
 goalRouter.delete("/:id", authorizeToken, controller.deleteController);
 // goalRouter.post("/", authorizeToken, controller.createController);
 

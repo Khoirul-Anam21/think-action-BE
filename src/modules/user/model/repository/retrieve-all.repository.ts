@@ -1,5 +1,8 @@
 import { UserEntityInterface } from "../user.entity.js";
-import DatabaseConnection, { QueryInterface, RetrieveAllOptionsInterface } from "@src/database/connection.js";
+import DatabaseConnection, {
+  QueryInterface,
+  RetrieveAllOptionsInterface,
+} from "@src/database/connection.js";
 import DatabaseManager from "@src/database/database-manager.js";
 
 interface DataInterface extends UserEntityInterface {
@@ -23,7 +26,10 @@ export class RetrieveAllUserRepository {
     this.databaseManager = new DatabaseManager(databaseConnection, "users");
   }
 
-  public async handle(query: QueryInterface, options?: RetrieveAllOptionsInterface): Promise<ResponseInterface> {
+  public async handle(
+    query: QueryInterface,
+    options?: RetrieveAllOptionsInterface
+  ): Promise<ResponseInterface> {
     return await this.databaseManager.retrieveAll(query, options);
   }
 }

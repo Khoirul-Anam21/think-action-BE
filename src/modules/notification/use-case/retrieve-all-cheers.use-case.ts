@@ -14,7 +14,7 @@ export class RetrieveAllNotificationsUseCase {
   public async handle(post_id: any, postType: any, options?: RetrieveAllOptionsInterface, page = 1, limit = 10) {
     try {
       // console.log(typeof user_id);
-      validateReadManyNotifications({ post_id, postType });
+      // validateReadManyNotifications({ post_id, postType });
       const retrieveAllNotificationRepository = new RetrieveAllNotificationRepository(this.db);
       const result = await retrieveAllNotificationRepository.handle(
         {

@@ -2,23 +2,34 @@ import { ObjectId } from "mongodb";
 import { RetrieveAllResolutionRepository } from "../model/repository/retrieve-all.repository.js";
 import DatabaseConnection, { QueryInterface, RetrieveAllOptionsInterface } from "@src/database/connection.js";
 import { RetrieveAllCheerRepository } from "@src/modules/cheer/model/repository/retrieve-all.repository.js";
+// import { validateId } from "@src/utils/id-validator.js";
 
-export class RetrieveAllResolutionUseCase {
+export class RetrieveResolutionByCategoryUseCase {
   private db: DatabaseConnection;
 
   constructor(db: DatabaseConnection) {
     this.db = db;
   }
 
-  public async handle(user_id?: string, options?: RetrieveAllOptionsInterface, page = 1, limit = 10) {
+  public async handle(
+    category_id?: string,
+    user_id?: string,
+    options?: RetrieveAllOptionsInterface,
+    page = 1,
+    limit = 10
+  ) {
     try {
+      // validateId({ category_id });
       const retrieveAllResolutionRepository = new RetrieveAllResolutionRepository(this.db);
       const retrieveAllCheerRepository = new RetrieveAllCheerRepository(this.db);
       // const filterUser = user_id !== undefined;
       const result = await retrieveAllResolutionRepository.handle(
         {
           fields: "",
-          filter: { user_id: new ObjectId(user_id) },
+          filter: {
+            user_id: new ObjectId(user_id),
+            category_id: new ObjectId(category_id),
+          },
           page,
           pageSize: limit,
           sort: "user_id",
@@ -45,7 +56,7 @@ export class RetrieveAllResolutionUseCase {
         })
       );
       return {
-        data: updatedResolution,
+        data: updatedResolution[0],
         pagination: result.pagination,
       };
     } catch (error) {

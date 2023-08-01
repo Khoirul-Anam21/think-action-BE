@@ -10,6 +10,7 @@ export const validateCreateCompletion = (document: DocumentInterface) => {
       caption: "required",
       images: "required",
       category_id: "required",
+      goal_id: "required",
       completedResolution: "required|boolean",
       shareType: "required",
       dueDate: "required|date",

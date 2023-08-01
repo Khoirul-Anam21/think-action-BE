@@ -2,14 +2,20 @@ import { NextFunction, Request, Response } from "express";
 import { UpdateUserUseCase } from "../use-case/update.use-case.js";
 import { db } from "@src/database/database.js";
 
-export const updateController = async (req: Request, res: Response, next: NextFunction) => {
+export const updateController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const session = db.startSession();
 
     db.startTransaction();
 
     const updateUserUseCase = new UpdateUserUseCase(db);
-    await updateUserUseCase.handle(req.params.id, req.body, req.file, { session });
+    await updateUserUseCase.handle(req.params.id, req.body, req.file, {
+      session,
+    });
 
     await db.commitTransaction();
 

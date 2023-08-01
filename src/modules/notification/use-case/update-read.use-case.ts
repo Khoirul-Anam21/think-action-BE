@@ -36,7 +36,7 @@ export class UpdateNotificationUseCase {
       const notification = new NotificationEntity({
         post_id: document.post_id,
         postType: document.postType,
-        userNotificationer_id: document.user_id,
+        userNotified_id: document.user_id,
         createdAt: new Date(),
       });
       const response = await new CreateNotificationRepository(this.db).handle(Notification, options);

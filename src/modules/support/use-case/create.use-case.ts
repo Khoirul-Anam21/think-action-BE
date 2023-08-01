@@ -1,3 +1,4 @@
+import { ApiError } from "@point-hub/express-error-handler";
 import { ObjectId } from "mongodb";
 import { CreateSupportingRepository } from "../model/repository/create.repository.js";
 import { SupportingEntity } from "../model/support.entity.js";
@@ -19,7 +20,16 @@ export class CreateSupportingUseCase {
       // validate(document);
       // find user
       const retrieveUserRepository = new RetrieveUserRepository(this.db);
-      const userSupporting: UserDisplayInterface = await retrieveUserRepository.handle(document.supporting_id);
+      const userSupporting: UserDisplayInterface = await retrieveUserRepository.handle(document.supporting_id, {
+        projection: {
+          _id: 1,
+          accountName: 1,
+          accountType: 1,
+          photo: 1,
+        },
+      });
+      if (!userSupporting) throw new ApiError(404, { msg: "user not found" });
+      if (userSupporting._id === document.user_id) throw new ApiError(400, { msg: "You can't support yourself" });
       // console.log(document.resolution);
       // save to database
       const supportingEntity = new SupportingEntity({

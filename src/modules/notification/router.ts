@@ -4,7 +4,11 @@ import { authorizeToken } from "@src/middleware/auth-middleware.js";
 
 const notificationRouter = Router();
 
-notificationRouter.get("/", authorizeToken, controller.readManyCheersController);
+notificationRouter.get(
+  "/",
+  authorizeToken,
+  controller.readManyCheersController
+);
 notificationRouter.post("/", authorizeToken, controller.createController);
 notificationRouter.delete("/:id", authorizeToken, controller.deleteController);
 

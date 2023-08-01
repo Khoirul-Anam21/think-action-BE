@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 export interface CompletionEntityInterface {
   _id?: string;
   user_id?: string | ObjectId;
+  goal_id?: string | ObjectId;
   caption?: string;
   images?: string[];
   category_id?: ObjectId;
@@ -20,6 +21,7 @@ export class CompletionEntity implements CompletionEntityInterface {
   public caption?: string | undefined;
   public images?: string[];
   public category_id?: ObjectId;
+  public goal_id?: string | ObjectId | undefined;
   public completedResolution?: boolean;
   public shareType?: string;
   public postType?: string | undefined;
@@ -33,6 +35,7 @@ export class CompletionEntity implements CompletionEntityInterface {
     this.caption = completion.caption;
     this.images = completion.images;
     this.category_id = completion.category_id;
+    this.goal_id = completion.goal_id;
     this.shareType = completion.shareType;
     this.postType = completion.postType;
     this.completedResolution = completion.completedResolution;
