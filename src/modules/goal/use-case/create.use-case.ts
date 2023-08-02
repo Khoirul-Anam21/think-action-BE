@@ -25,7 +25,11 @@ export class CreateGoalUseCase {
       const imageUrls = await Promise.all(
         images?.map(async (image: Express.Multer.File) => {
           const path = image.path;
-          const uploadRes = await uploader.upload(path, { folder: "think-action/posts", resource_type: "image" });
+          const uploadRes = await uploader.upload(path, {
+            folder: "think-action/posts",
+            resource_type: "image",
+            quality: 70,
+          });
           await deleteFileAfterUpload(path);
           return uploadRes.secure_url;
         })

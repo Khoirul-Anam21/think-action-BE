@@ -1,10 +1,8 @@
-import { ApiError } from "@point-hub/express-error-handler";
 import { objClean } from "@point-hub/express-utils";
 import uploader, { deleteFileAfterUpload } from "../../../services/cloudinary/index.js";
 import { RetrieveResolutionRepository } from "../model/repository/retrieve.repository.js";
 import { UpdateResolutionRepository } from "../model/repository/update.repository.js";
 import { ResolutionEntity } from "../model/resolution.entity.js";
-import { validate } from "../validation/update.validation.js";
 import DatabaseConnection, { UpdateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
 import { validateId } from "@src/utils/id-validator.js";
 
@@ -25,7 +23,11 @@ export class UpdateResolutionUseCase {
         const imageUrls = await Promise.all(
           images?.map(async (image: Express.Multer.File) => {
             const path = image.path;
-            const uploadRes = await uploader.upload(path, { folder: "think-action/posts", resource_type: "image" });
+            const uploadRes = await uploader.upload(path, {
+              folder: "think-action/posts",
+              resource_type: "image",
+              quality: 70,
+            });
             await deleteFileAfterUpload(path);
             return uploadRes.secure_url;
           })

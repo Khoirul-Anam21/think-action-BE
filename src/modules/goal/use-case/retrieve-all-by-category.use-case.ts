@@ -1,10 +1,9 @@
 import { ObjectId } from "mongodb";
 import { RetrieveAllGoalRepository } from "../model/repository/retrieve-all.repository.js";
-import DatabaseConnection, {
-  QueryInterface,
-  RetrieveAllOptionsInterface,
-} from "@src/database/connection.js";
+import DatabaseConnection, { QueryInterface, RetrieveAllOptionsInterface } from "@src/database/connection.js";
+import { CategoryEntityInterface } from "@src/modules/category/model/category.entity.js";
 import { RetrieveAllCheerRepository } from "@src/modules/cheer/model/repository/retrieve-all.repository.js";
+import { RetrieveUserRepository } from "@src/modules/user/model/repository/retrieve.repository.js";
 
 export class RetrieveAllGoalByCategoryUseCase {
   private db: DatabaseConnection;
@@ -24,9 +23,8 @@ export class RetrieveAllGoalByCategoryUseCase {
       // console.log(typeof user_id);
       const retrieveAllGoalRepository = new RetrieveAllGoalRepository(this.db);
       // const filterUser = user_id !== undefined;
-      const retrieveAllCheerRepository = new RetrieveAllCheerRepository(
-        this.db
-      );
+      const retrieveAllCheerRepository = new RetrieveAllCheerRepository(this.db);
+      const retrieveUserRepository = new RetrieveUserRepository(this.db);
       const result = await retrieveAllGoalRepository.handle(
         {
           fields: "",
@@ -55,7 +53,10 @@ export class RetrieveAllGoalByCategoryUseCase {
             },
             options
           );
-          return { ...goal, cheers: cheers.data.length };
+          const categories = (await retrieveUserRepository.handle(user_id as string))
+            .categories as CategoryEntityInterface[];
+          const index = categories?.findIndex((category) => category._id === category_id);
+          return { ...goal, category: categories[index], cheers: cheers.data.length };
         })
       );
       return {

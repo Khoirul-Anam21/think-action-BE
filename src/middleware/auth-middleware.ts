@@ -12,39 +12,30 @@ export interface AuthUserInterface {
   email?: string;
 }
 
-export const authorizeToken = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const authorizeToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authorizationHeader = req.headers.authorization ?? "";
 
     if (authorizationHeader === "") {
-      throw new ApiError(401, { msg: "missing token" });
+      res.status(401).json({ msg: "missing token" });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const token: any = verifyToken(
-      authorizationHeader.split(" ")[1],
-      process.env.JWT_SECRET as string
-    );
+    const token: any = verifyToken(authorizationHeader.split(" ")[1], process.env.JWT_SECRET as string);
 
     // token invalid
     if (!token) {
-      throw new ApiError(401, { msg: "invalid token" });
+      res.status(401).json({ msg: "invalid token" });
     }
 
     // token expired
     if (new Date() > token.exp) {
-      throw new ApiError(401, { msg: "token expired" });
+      res.status(401).json({ msg: "token expired" });
     }
 
     // const readAllUserUseCase = new RetrieveUserUseCase(db);
     const readManyUserRepository = new RetrieveUserRepository(db);
-    const user: UserEntityInterface = await readManyUserRepository.handle(
-      token.sub
-    );
+    const user: UserEntityInterface = await readManyUserRepository.handle(token.sub);
     const result: AuthUserInterface = {
       _id: user._id,
       username: user.username,
@@ -55,6 +46,6 @@ export const authorizeToken = async (
 
     return next();
   } catch (error) {
-    throw new ApiError(401, { msg: "Invalid Token", detail: error });
+    next(error);
   }
 };

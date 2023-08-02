@@ -4,6 +4,7 @@ import categoryRouter from "./modules/category/router.js";
 import cheerRouter from "./modules/cheer/router.js";
 import completionRouter from "./modules/completion/router.js";
 import goalRouter from "./modules/goal/router.js";
+import reportRouter from "./modules/report/router.js";
 import resolutionRouter from "./modules/resolution/router.js";
 import userSupportRouter from "./modules/support/router.js";
 import userRouter from "./modules/user/router.js";
@@ -25,6 +26,7 @@ export default async function () {
   app.use("/cheers", cheerRouter);
   app.use("/supports", userSupportRouter);
   app.use("/categories", categoryRouter);
+  app.use("/reports", reportRouter);
 
   return app;
 }

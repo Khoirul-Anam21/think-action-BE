@@ -1,14 +1,9 @@
-import uploader, {
-  deleteFileAfterUpload,
-} from "../../../services/cloudinary/index.js";
+import uploader, { deleteFileAfterUpload } from "../../../services/cloudinary/index.js";
 import { CompletionEntity } from "../model/completion.entity.js";
 import { CreateCompletionRepository } from "../model/repository/create.repository.js";
 // import { validateCreateCompletion } from "../validation/create.validation.js";
 import { validateCreateCompletion } from "../validation/create.validation.js";
-import DatabaseConnection, {
-  CreateOptionsInterface,
-  DocumentInterface,
-} from "@src/database/connection.js";
+import DatabaseConnection, { CreateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
 import { RetrieveUserRepository } from "@src/modules/user/model/repository/retrieve.repository.js";
 
 export class CreateCompletionUseCase {
@@ -18,11 +13,7 @@ export class CreateCompletionUseCase {
     this.db = db;
   }
 
-  public async handle(
-    document: DocumentInterface,
-    images: any,
-    options: CreateOptionsInterface
-  ) {
+  public async handle(document: DocumentInterface, images: any, options: CreateOptionsInterface) {
     try {
       // validate request body
       validateCreateCompletion({ ...document, images });
@@ -37,6 +28,7 @@ export class CreateCompletionUseCase {
           const uploadRes = await uploader.upload(path, {
             folder: "think-action/posts",
             resource_type: "image",
+            quality: 70,
           });
           await deleteFileAfterUpload(path);
           return uploadRes.secure_url;
@@ -57,10 +49,7 @@ export class CreateCompletionUseCase {
 
       console.log(document.user_id);
 
-      const response = await new CreateCompletionRepository(this.db).handle(
-        completion,
-        options
-      );
+      const response = await new CreateCompletionRepository(this.db).handle(completion, options);
 
       return {
         acknowledged: response.acknowledged,

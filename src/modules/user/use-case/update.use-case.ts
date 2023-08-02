@@ -4,14 +4,8 @@ import { RetrieveUserRepository } from "../model/repository/retrieve.repository.
 import { UpdateUserRepository } from "../model/repository/update.repository.js";
 import { UserEntity } from "../model/user.entity.js";
 // import { validate } from "../validation/update.validation.js";
-import DatabaseConnection, {
-  UpdateOptionsInterface,
-  DocumentInterface,
-} from "@src/database/connection.js";
-import uploader, {
-  deleteFileAfterUpload,
-  getCloudinaryPublicId,
-} from "@src/services/cloudinary/index.js";
+import DatabaseConnection, { UpdateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
+import uploader, { deleteFileAfterUpload, getCloudinaryPublicId } from "@src/services/cloudinary/index.js";
 import { validateId } from "@src/utils/id-validator.js";
 
 export class UpdateUserUseCase {

@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { RetrieveAllSupportingRepository } from "../model/repository/retrieve-all.repository.js";
-import DatabaseConnection, { QueryInterface, RetrieveAllOptionsInterface } from "@src/database/connection.js";
+import DatabaseConnection, { RetrieveAllOptionsInterface } from "@src/database/connection.js";
 
 export class RetrieveAllSupportingUseCase {
   private db: DatabaseConnection;
@@ -13,6 +13,7 @@ export class RetrieveAllSupportingUseCase {
     try {
       console.log(typeof user_id);
       const retrieveAllSupportingRepository = new RetrieveAllSupportingRepository(this.db);
+      // const retrieveUserRepository = new RetrieveUserRepository(this.db);
       const result = await retrieveAllSupportingRepository.handle(
         {
           fields: "",
@@ -20,11 +21,15 @@ export class RetrieveAllSupportingUseCase {
           page,
           pageSize: limit,
           sort: "user_id",
-          excludeFields: ["supporting.accessToken", "supporting.refreshToken"],
+          excludeFields: ["supporting.accessToken", "supporting.refreshToken", "supporting.accountType"],
         },
         options
       );
-      return result;
+      const supportingUsers = result.data.map((supporting) => supporting.supporting);
+      return {
+        data: supportingUsers,
+        pagination: result.pagination,
+      };
     } catch (error) {
       throw error;
     }
