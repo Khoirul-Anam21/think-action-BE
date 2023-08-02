@@ -28,7 +28,6 @@ export const FindPost = async (
       break;
     default:
       throw new ApiError(404, { msg: "post not found" });
-      break;
   }
   const user = await retrieveUserRepository.handle(result.user_id as string);
   const userData = {

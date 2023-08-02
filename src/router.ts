@@ -25,6 +25,7 @@ export default async function () {
   app.use("/cheers", cheerRouter);
   app.use("/supports", userSupportRouter);
   app.use("/categories", categoryRouter);
+  app.use("/comments", commentRouter)
 
   return app;
 }
