@@ -1,11 +1,10 @@
 import { ApiError } from "@point-hub/express-error-handler";
-import { ObjectId } from "mongodb";
 import { CreateSupportingRepository } from "../model/repository/create.repository.js";
 import { SupportingEntity } from "../model/support.entity.js";
-import { validate } from "../validation/create.validation.js";
 import DatabaseConnection, { CreateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
+import { CreateNotificationUseCase } from "@src/modules/notification/use-case/create.use-case.js";
 import { RetrieveUserRepository } from "@src/modules/user/model/repository/retrieve.repository.js";
-import { UserDisplayInterface } from "@src/modules/user/model/user.entity.js";
+import { UserEntityInterface } from "@src/modules/user/model/user.entity.js";
 
 export class CreateSupportingUseCase {
   private db: DatabaseConnection;
@@ -20,7 +19,7 @@ export class CreateSupportingUseCase {
       // validate(document);
       // find user
       const retrieveUserRepository = new RetrieveUserRepository(this.db);
-      const userSupporting: UserDisplayInterface = await retrieveUserRepository.handle(document.supporting_id, {
+      const userSupporting: UserEntityInterface = await retrieveUserRepository.handle(document.supporting_id, {
         projection: {
           _id: 1,
           accountName: 1,
@@ -30,6 +29,22 @@ export class CreateSupportingUseCase {
       });
       if (!userSupporting) throw new ApiError(404, { msg: "user not found" });
       if (userSupporting._id === document.user_id) throw new ApiError(400, { msg: "You can't support yourself" });
+      if (userSupporting.accountType === "private") {
+        const createNotificationUseCase = new CreateNotificationUseCase(this.db);
+        const notification = await createNotificationUseCase.handle(
+          {
+            user_id: document.user_id,
+            userNotified: userSupporting._id,
+            messageType: "support",
+          },
+          options
+        );
+        return {
+          notification_id: notification.id,
+          msg: "The specified account is private, will notify instead",
+          acknowledged: notification.acknowledged,
+        };
+      }
       // console.log(document.resolution);
       // save to database
       const supportingEntity = new SupportingEntity({

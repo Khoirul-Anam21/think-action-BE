@@ -2,6 +2,7 @@ import express, { Express } from "express";
 import authRouter from "./modules/auth/router.js";
 import categoryRouter from "./modules/category/router.js";
 import cheerRouter from "./modules/cheer/router.js";
+import commentRouter from "./modules/comment/router.js";
 import completionRouter from "./modules/completion/router.js";
 import goalRouter from "./modules/goal/router.js";
 import reportRouter from "./modules/report/router.js";
@@ -22,7 +23,7 @@ export default async function () {
   app.use("/resolutions", resolutionRouter);
   app.use("/goals", goalRouter);
   app.use("/completions", completionRouter);
-  // app.use("/completion", completionRouter);
+  app.use("/comments", commentRouter);
   app.use("/cheers", cheerRouter);
   app.use("/supports", userSupportRouter);
   app.use("/categories", categoryRouter);

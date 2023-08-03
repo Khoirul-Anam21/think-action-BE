@@ -1,6 +1,5 @@
 import { ApiError } from "@point-hub/express-error-handler";
 import { ObjectId } from "mongodb";
-import { RetrieveAllNotificationRepository } from "../model/.repository/retrieve-all.repository.js";
 // import { validateReadManyNotifications } from "../validation/raeadMany.validation.js";
 import DatabaseConnection, { RetrieveAllOptionsInterface } from "@src/database/connection.js";
 import { CategoryEntityInterface } from "@src/modules/category/model/category.entity.js";
