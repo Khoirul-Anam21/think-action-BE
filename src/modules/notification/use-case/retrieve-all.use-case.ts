@@ -11,7 +11,7 @@ export class RetrieveAllNotificationsUseCase {
     this.db = db;
   }
 
-  public async handle(post_id: any, postType: any, options?: RetrieveAllOptionsInterface, page = 1, limit = 10) {
+  public async handle(user_id: string, options?: RetrieveAllOptionsInterface, page = 1, limit = 10) {
     try {
       // console.log(typeof user_id);
       // validateReadManyNotifications({ post_id, postType });
@@ -19,10 +19,10 @@ export class RetrieveAllNotificationsUseCase {
       const result = await retrieveAllNotificationRepository.handle(
         {
           fields: "",
-          filter: { post_id: new ObjectId(post_id), postType },
+          filter: { userNotified_id: new ObjectId(user_id) },
           page: 1,
           pageSize: 999,
-          sort: "user_id",
+          sort: "",
         },
         options
       );

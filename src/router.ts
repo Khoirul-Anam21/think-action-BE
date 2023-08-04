@@ -5,6 +5,7 @@ import cheerRouter from "./modules/cheer/router.js";
 import commentRouter from "./modules/comment/router.js";
 import completionRouter from "./modules/completion/router.js";
 import goalRouter from "./modules/goal/router.js";
+import notificationRouter from "./modules/notification/router.js";
 import reportRouter from "./modules/report/router.js";
 import resolutionRouter from "./modules/resolution/router.js";
 import userSupportRouter from "./modules/support/router.js";
@@ -28,6 +29,7 @@ export default async function () {
   app.use("/supports", userSupportRouter);
   app.use("/categories", categoryRouter);
   app.use("/reports", reportRouter);
+  app.use("/notifications", notificationRouter);
 
   return app;
 }

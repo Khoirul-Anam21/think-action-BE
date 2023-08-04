@@ -35,6 +35,7 @@ export class CreateNotificationUseCase {
           userNotified_id: post.user.id,
           message,
           read: false,
+          createdAt: new Date(),
         });
         const result = await createNotificationRepository.handle(notification, options);
         return {
@@ -49,6 +50,7 @@ export class CreateNotificationUseCase {
         userNotified_id: document.userNotified,
         message: user.accountName + " requested to support you",
         read: false,
+        createdAt: new Date(),
       });
       const result = await createNotificationRepository.handle(notification, options);
       return {

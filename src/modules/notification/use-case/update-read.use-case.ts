@@ -1,12 +1,10 @@
 import { ApiError } from "@point-hub/express-error-handler";
 import { ObjectId } from "mongodb";
-import { NotificationEntity } from "../model/notification.entity.js";
-import { CreateNotificationRepository } from "../model/repository/create.repository.js";
 import { RetrieveAllNotificationRepository } from "../model/repository/retrieve-all.repository.js";
+import { UpdateManyNotificationRepository } from "../model/repository/update-many.repository.js";
 import DatabaseConnection, { CreateOptionsInterface, DocumentInterface } from "@src/database/connection.js";
-import { FindPost } from "@src/utils/post-finder.js";
 
-export class UpdateNotificationUseCase {
+export class UpdateReadNotificationUseCase {
   private db: DatabaseConnection;
 
   constructor(db: DatabaseConnection) {
@@ -16,36 +14,23 @@ export class UpdateNotificationUseCase {
   public async handle(document: DocumentInterface, options: CreateOptionsInterface) {
     try {
       const retrieveAllNotificationRepository = new RetrieveAllNotificationRepository(this.db);
-      const Notifications = await retrieveAllNotificationRepository.handle({
+      const updateManyNotificationRepository = new UpdateManyNotificationRepository(this.db);
+      const notifications: any = await retrieveAllNotificationRepository.handle({
         fields: "",
         filter: {
-          userNotificationer_id: new ObjectId(document.user_id),
-          post_id: new ObjectId(document.post_id),
-          postType: document.postType,
+          userNotified_id: new ObjectId(document.user_id),
         },
         page: 1,
         pageSize: 9999,
         sort: "user_id",
       });
-
-      console.log(Notifications);
-      if (Notifications.data.length > 0) throw new ApiError(400, { msg: "You already Notificationed this post" });
-
-      await FindPost(document.postType, document.post_id, this.db, options);
-
-      const notification = new NotificationEntity({
-        post_id: document.post_id,
-        postType: document.postType,
-        userNotified_id: document.user_id,
-        createdAt: new Date(),
-      });
-      const response = await new CreateNotificationRepository(this.db).handle(Notification, options);
-
-      // TODO: Notif
-      return {
-        acknowledged: response.acknowledged,
-        _id: response._id,
-      };
+      if (!notifications.data) throw new ApiError(404, { msg: "notifications not found" });
+      await updateManyNotificationRepository.handle(
+        { user_id: new ObjectId(document.user_id), read: false },
+        { $set: { read: true, updatedAt: new Date() } },
+        options
+      );
+      return {};
     } catch (error) {
       console.log(error);
       throw error;

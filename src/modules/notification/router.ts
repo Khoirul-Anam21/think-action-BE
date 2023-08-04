@@ -4,12 +4,8 @@ import { authorizeToken } from "@src/middleware/auth-middleware.js";
 
 const notificationRouter = Router();
 
-notificationRouter.get(
-  "/",
-  authorizeToken,
-  controller.readManyCheersController
-);
-notificationRouter.post("/", authorizeToken, controller.createController);
+notificationRouter.get("/", authorizeToken, controller.readManyNotificationsController);
+notificationRouter.patch("/", authorizeToken, controller.updateReadController);
 notificationRouter.delete("/:id", authorizeToken, controller.deleteController);
 
 // create notif add default value, read false, after opened read become false by sending an array of notif id
