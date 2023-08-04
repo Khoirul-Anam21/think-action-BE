@@ -6,6 +6,7 @@ const commentRouter = Router();
 
 commentRouter.post("/", authorizeToken, controller.createController);
 commentRouter.post("/replies", authorizeToken, controller.createReplyController);
+commentRouter.get("/", authorizeToken, controller.readManyCommentsController);
 // commentRouter.delete("/:id", authorizeToken, controller.deleteController);
 
 export default commentRouter;

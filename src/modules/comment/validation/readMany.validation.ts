@@ -3,10 +3,10 @@ import Validatorjs from "validatorjs";
 import { DocumentInterface } from "@src/database/connection.js";
 
 // https://github.com/mikeerickson/validatorjs
-export const validateReadManyCheers = (document: DocumentInterface) => {
+export const validateReadComments = (document: DocumentInterface) => {
   try {
     const validation = new Validatorjs(document, {
-      post_id: "required|size:24",
+      post_id: "required",
       postType: "required",
     });
 

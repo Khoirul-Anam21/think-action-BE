@@ -1,6 +1,6 @@
 {
   "include": [
-    "**/*.ts", "src/modules/user/controller/retrieve.controller.ts",
+    "**/*.ts", "src/modules/user/controller/retrieve.controller.ts", "src/modules/comment/validation/readMany.validation.ts",
   ],
   "exclude": [
     "coverage",
